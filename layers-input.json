@@ -6,6 +6,8 @@
         "center": [-119.4179, 36.7783],
         "zoom": 6
     },
+
+    "_llm_note": "Uncomment the llm block below for GitHub Pages / static hosting (no server secrets). For Kubernetes, delete it — the k8s/ manifests inject config.json with API keys at deploy time.",
     "llm": {
         "user_provided": true,
         "default_endpoint": "https://openrouter.ai/api/v1",
@@ -15,6 +17,7 @@
             { "value": "openai/gpt-4.1-mini", "label": "GPT-4.1 mini" }
         ]
     },
+
     "collections": [
         {
             "collection_id": "calenviroscreen-5-0",

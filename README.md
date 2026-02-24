@@ -5,36 +5,49 @@ Users describe in plain language what datasets to show; the app uses an LLM agen
 
 **No JavaScript to write.** The core modules (map, chat, agent, tools) are loaded from CDN. You configure which data to show via three small files.
 
-## Choose a deployment option
+## Repository structure
 
-This template includes two deployment options. **Pick one** and delete the other folder.
+```
+index.html          ← HTML shell — loads core JS/CSS from CDN
+layers-input.json   ← which STAC collections to show + LLM settings
+system-prompt.md    ← LLM system prompt (customize per app)
+k8s/                ← Kubernetes deployment manifests (optional)
+```
 
-| Option | Folder | LLM key | Best for |
-|---|---|---|---|
-| **GitHub Pages** | `ghpages/` | User-provided (browser) | Public demos, no server needed |
-| **Kubernetes** | `k8s/` | Server-managed (secrets) | Production, private LLM proxy |
+## Quick start
 
----
+### 1. Create your repo from this template
 
-## Option A: GitHub Pages
+Click **"Use this template"** on GitHub → **"Create a new repository"**.
 
-The simplest option. No server-side secrets needed — each visitor enters their own LLM API key (e.g. from [OpenRouter](https://openrouter.ai)) via an in-app settings panel. Keys are stored in the browser's `localStorage` only.
+### 2. Choose your datasets
 
-### Setup
+Browse the available STAC catalog:
 
-1. **Create your repo** from this template (click "Use this template" on GitHub)
-2. **Delete the `k8s/` folder** — you won't need it
-3. **Edit `ghpages/layers-input.json`** — set your STAC collections and preferred model list
-4. **Edit `ghpages/system-prompt.md`** — customize the AI assistant persona
-5. **Enable GitHub Pages**: Settings → Pages → Source → **GitHub Actions**
-6. Add the workflow file at `.github/workflows/gh-pages.yml`:
+```
+https://radiantearth.github.io/stac-browser/#/external/s3-west.nrp-nautilus.io/public-data/stac/catalog.json
+```
+
+Edit `layers-input.json` — set your collections and adjust the default map view.
+
+### 3. Edit `system-prompt.md`
+
+Describe the domain, what users are likely to ask, and include SQL examples relevant to your datasets.
+
+### 4. Choose a deployment method
+
+#### Option A: GitHub Pages (no server needed)
+
+The `llm` block in `layers-input.json` is already enabled. Each visitor enters their own API key (e.g. from [OpenRouter](https://openrouter.ai)) in the in-app settings panel — keys are stored in the browser only, never on the server.
+
+1. Enable GitHub Pages in your repo: Settings → Pages → Source → **GitHub Actions**
+2. Add `.github/workflows/gh-pages.yml`:
 
 ```yaml
 name: Deploy to GitHub Pages
 on:
   push:
     branches: [main]
-    paths: [ghpages/**]
 permissions:
   contents: read
   pages: write
@@ -50,106 +63,38 @@ jobs:
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:
-          path: ghpages/
+          path: .
       - id: deployment
         uses: actions/deploy-pages@v4
 ```
 
-### Local development
+3. Push — the workflow deploys automatically on changes to `main`.
 
-```bash
-cd ghpages
-python -m http.server 8000
-# Open http://localhost:8000 — enter your API key in the settings panel
-```
+#### Option B: Kubernetes
 
----
+API keys are injected server-side via a ConfigMap + Kubernetes secrets — no user-facing key entry.
 
-## Option B: Kubernetes
-
-For production deployments with a managed LLM proxy and server-injected API keys (no user-facing key entry).
-
-### Setup
-
-1. **Create your repo** from this template
-2. **Delete the `ghpages/` folder** — you won't need it
-3. **Edit `k8s/layers-input.json`** — set your STAC collections
-4. **Edit `k8s/system-prompt.md`** — customize the AI assistant
-5. **Update `k8s/k8s/deployment.yaml`** — replace the git clone URL with your repo:
-
-```yaml
-git clone --depth 1 https://github.com/YOUR-ORG/YOUR-REPO.git /tmp/repo
-```
-
-6. **Replace the slug** `calenviroscreen` everywhere in `k8s/k8s/` with your app name:
-
-| File | What to change |
-|---|---|
-| `deployment.yaml` | `metadata.name`, all `app:` labels |
-| `service.yaml` | `metadata.name`, `app:` label and selector |
-| `ingress.yaml` | `metadata.name`, TLS host, rules host, backend `service.name` |
-| `configmap.yaml` | Both ConfigMap `metadata.name` values |
-
-7. **Set your hostname** in `k8s/k8s/ingress.yaml`:
-
-```yaml
-- host: my-app.nrp-nautilus.io
-```
-
-8. **Create the required Kubernetes secret**:
+1. Delete the `llm` block from `layers-input.json` (the server-injected `config.json` takes precedence anyway)
+2. Replace the git clone URL in `k8s/deployment.yaml` with your repo URL
+3. Replace the slug `calenviroscreen` throughout `k8s/` with your app name
+4. Set your hostname in `k8s/ingress.yaml`
+5. Create the required secret:
 
 ```bash
 kubectl create secret generic llm-proxy-secrets \
   --from-literal=proxy-key=YOUR_PROXY_KEY
 ```
 
-9. **Deploy**:
+6. Deploy:
 
 ```bash
-kubectl apply -f k8s/k8s/configmap.yaml
-kubectl apply -f k8s/k8s/deployment.yaml
-kubectl apply -f k8s/k8s/service.yaml
-kubectl apply -f k8s/k8s/ingress.yaml
+kubectl apply -f k8s/
+kubectl rollout status deployment/my-app
 ```
 
-After pushing changes, redeploy (the init container re-clones your repo):
+After pushing changes, redeploy: `kubectl rollout restart deployment/my-app`
 
-```bash
-kubectl rollout restart deployment/my-app
-```
-
-### Local development
-
-```bash
-cd k8s
-python -m http.server 8000
-
-# Create a minimal config.json so the LLM works locally:
-cat > config.json <<'EOF'
-{
-  "llm_models": [
-    {
-      "value": "glm-4.7",
-      "label": "NRP GLM-4.7",
-      "endpoint": "https://llm-proxy.nrp-nautilus.io/v1",
-      "api_key": "YOUR_PROXY_KEY"
-    }
-  ]
-}
-EOF
-```
-
----
-
-## Configuring your datasets
-
-Browse available data in the STAC catalog:
-
-```
-https://radiantearth.github.io/stac-browser/#/external/s3-west.nrp-nautilus.io/public-data/stac/catalog.json
-```
-
-### `layers-input.json` reference
+## `layers-input.json` reference
 
 ```json
 {
@@ -157,6 +102,16 @@ https://radiantearth.github.io/stac-browser/#/external/s3-west.nrp-nautilus.io/p
     "titiler_url": "https://titiler.nrp-nautilus.io",
     "mcp_url": "https://duckdb-mcp.nrp-nautilus.io/mcp",
     "view": { "center": [-119.4, 36.8], "zoom": 6 },
+
+    "llm": {
+        "user_provided": true,
+        "default_endpoint": "https://openrouter.ai/api/v1",
+        "models": [
+            { "value": "anthropic/claude-sonnet-4", "label": "Claude Sonnet" },
+            { "value": "google/gemini-2.5-flash", "label": "Gemini Flash" }
+        ]
+    },
+
     "collections": [
         "some-collection",
         {
@@ -181,21 +136,13 @@ https://radiantearth.github.io/stac-browser/#/external/s3-west.nrp-nautilus.io/p
 }
 ```
 
-- A bare **string** collection entry loads all visual assets
-- An **object** entry with `assets` cherry-picks specific STAC asset IDs
-- `visible`: show layer on by default (default: false)
-- `default_style`: MapLibre paint expression applied at load
-- `default_filter`: MapLibre filter expression applied at load — use `["match", ["get", "col"], ["val1", "val2"], true, false]` for list membership (do **not** use the legacy `["in", ...]` form)
-- `tooltip_fields`: property names shown on hover
+**Filter syntax note:** use `["match", ["get", "col"], ["val1", "val2"], true, false]` for list membership. Do **not** use the legacy `["in", "col", val1, val2]` form — it is silently ignored in current MapLibre.
 
-## How it works
+## Local development
 
-`index.html` loads the core library from jsDelivr CDN. To pin to a stable release:
-
-```html
-<script type="module" src="https://cdn.jsdelivr.net/gh/boettiger-lab/geo-agent@v1.0.0/app/main.js"></script>
+```bash
+python -m http.server 8000
+# Open http://localhost:8000 — enter your API key in the settings panel
 ```
-
-At runtime `main.js` fetches `layers-input.json`, `system-prompt.md`, and `config.json` from the same origin as the page — so each deployment provides its own configuration while sharing the same application code.
 
 See [boettiger-lab/geo-agent](https://github.com/boettiger-lab/geo-agent) for the core library source and live examples.
