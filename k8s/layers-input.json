@@ -3,10 +3,7 @@
     "titiler_url": "https://titiler.nrp-nautilus.io",
     "mcp_url": "https://duckdb-mcp.nrp-nautilus.io/mcp",
     "view": {
-        "center": [
-            -119.4179,
-            36.7783
-        ],
+        "center": [-119.4179, 36.7783],
         "zoom": 6
     },
     "collections": [

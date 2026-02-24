@@ -1,151 +1,130 @@
 # geo-agent-template
 
-A GitHub template for deploying an AI-powered interactive map app on Kubernetes. 
+A GitHub template for deploying an AI-powered interactive map app.
 Users describe in plain language what datasets to show; the app uses an LLM agent with map tools and SQL access to visualize and analyze cloud-native geospatial data.
 
-**No JavaScript to write.** The core modules (map, chat, agent, tools) are loaded from the CDN. You configure which data to show via three small files.
+**No JavaScript to write.** The core modules (map, chat, agent, tools) are loaded from CDN. You configure which data to show via three small files.
 
-## Quick start
+## Choose a deployment option
 
-### 1. Create your repo from this template
+This template includes two deployment options. **Pick one** and delete the other folder.
 
-Click **"Use this template"** on GitHub → **"Create a new repository"**.  
-Clone your new repo:
+| Option | Folder | LLM key | Best for |
+|---|---|---|---|
+| **GitHub Pages** | `ghpages/` | User-provided (browser) | Public demos, no server needed |
+| **Kubernetes** | `k8s/` | Server-managed (secrets) | Production, private LLM proxy |
+
+---
+
+## Option A: GitHub Pages
+
+The simplest option. No server-side secrets needed — each visitor enters their own LLM API key (e.g. from [OpenRouter](https://openrouter.ai)) via an in-app settings panel. Keys are stored in the browser's `localStorage` only.
+
+### Setup
+
+1. **Create your repo** from this template (click "Use this template" on GitHub)
+2. **Delete the `k8s/` folder** — you won't need it
+3. **Edit `ghpages/layers-input.json`** — set your STAC collections and preferred model list
+4. **Edit `ghpages/system-prompt.md`** — customize the AI assistant persona
+5. **Enable GitHub Pages**: Settings → Pages → Source → **GitHub Actions**
+6. Add the workflow file at `.github/workflows/gh-pages.yml`:
+
+```yaml
+name: Deploy to GitHub Pages
+on:
+  push:
+    branches: [main]
+    paths: [ghpages/**]
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: ghpages/
+      - id: deployment
+        uses: actions/deploy-pages@v4
+```
+
+### Local development
 
 ```bash
-git clone https://github.com/YOUR-ORG/YOUR-REPO.git
-cd YOUR-REPO
+cd ghpages
+python -m http.server 8000
+# Open http://localhost:8000 — enter your API key in the settings panel
 ```
 
-### 2. Choose your datasets
+---
 
-Browse the available STAC catalog:
+## Option B: Kubernetes
 
-```
-https://s3-west.nrp-nautilus.io/public-data/stac/catalog.json
-```
+For production deployments with a managed LLM proxy and server-injected API keys (no user-facing key entry).
 
-You can explore it interactively in the STAC Browser:
+### Setup
 
-```
-https://radiantearth.github.io/stac-browser/#/external/s3-west.nrp-nautilus.io/public-data/stac/catalog.json
-```
-
-Each collection has a `"id"` field (used in `layers-input.json`) and `"assets"` (the specific layers to display). Collections provide:
-- **PMTiles** — vector tile layers rendered directly on the map
-- **COG** — cloud-optimized raster layers rendered via TiTiler
-- **Parquet / H3 Parquet** — tabular/hex data available to the AI for SQL queries
-
-### 3. Edit the three config files
-
-#### `layers-input.json` — which datasets to load
-
-```json
-{
-    "catalog": "https://s3-west.nrp-nautilus.io/public-data/stac/catalog.json",
-    "titiler_url": "https://titiler.nrp-nautilus.io",
-    "mcp_url": "https://duckdb-mcp.nrp-nautilus.io/mcp",
-    "view": { "center": [-119.4, 36.8], "zoom": 6 },
-    "collections": [
-        "some-collection",
-        {
-            "collection_id": "another-collection",
-            "assets": [
-                "asset-id-1",
-                { "id": "asset-id-2", "display_name": "Friendly Name" }
-            ]
-        }
-    ]
-}
-```
-
-- A bare **string** collection entry loads all visual assets from that collection
-- An **object** entry with `assets` cherry-picks specific STAC asset IDs
-- Asset filtering only affects map layer toggles — all parquet/H3 data remains available to the AI for SQL queries
-
-#### `system-prompt.md` — the AI assistant's persona and guidelines
-
-Describe the domain, what the user is likely to ask, and how the AI should respond.  
-Include SQL examples relevant to your datasets so the LLM has a template to follow.  
-The available dataset schemas are injected automatically at runtime via `list_datasets` / `get_dataset_details` MCP tools.
-
-#### `index.html` — page title and CDN version
-
-Update the `<title>` tag. To pin to a specific release of the core library:
-
-```html
-<script type="module" src="https://cdn.jsdelivr.net/gh/boettiger-lab/geo-agent@v1.0.0/app/main.js"></script>
-```
-
-To track the latest development version:
-
-```html
-<script type="module" src="https://cdn.jsdelivr.net/gh/boettiger-lab/geo-agent@main/app/main.js"></script>
-```
-
-### 4. Update the Kubernetes manifests
-
-All four files in `k8s/` contain a name slug that must be updated to match your app. Replace every occurrence of the current slug (e.g. `calenviroscreen`) with your own (e.g. `my-app`):
-
-| File | What to change |
-|---|---|
-| `deployment.yaml` | `metadata.name`, all `app:` labels, and the **git clone URL** (point to your repo) |
-| `service.yaml` | `metadata.name`, `app:` label and selector |
-| `ingress.yaml` | `metadata.name`, TLS host, rules host, backend `service.name` |
-| `configmap.yaml` | Both ConfigMap `metadata.name` values (`*-config` and `*-nginx`) |
-
-The critical line in `deployment.yaml` to update is the git clone URL — the init container clones your repo at deploy time to serve the static files:
+1. **Create your repo** from this template
+2. **Delete the `ghpages/` folder** — you won't need it
+3. **Edit `k8s/layers-input.json`** — set your STAC collections
+4. **Edit `k8s/system-prompt.md`** — customize the AI assistant
+5. **Update `k8s/k8s/deployment.yaml`** — replace the git clone URL with your repo:
 
 ```yaml
 git clone --depth 1 https://github.com/YOUR-ORG/YOUR-REPO.git /tmp/repo
 ```
 
-Set the hostname in `ingress.yaml` to your desired subdomain:
+6. **Replace the slug** `calenviroscreen` everywhere in `k8s/k8s/` with your app name:
+
+| File | What to change |
+|---|---|
+| `deployment.yaml` | `metadata.name`, all `app:` labels |
+| `service.yaml` | `metadata.name`, `app:` label and selector |
+| `ingress.yaml` | `metadata.name`, TLS host, rules host, backend `service.name` |
+| `configmap.yaml` | Both ConfigMap `metadata.name` values |
+
+7. **Set your hostname** in `k8s/k8s/ingress.yaml`:
 
 ```yaml
 - host: my-app.nrp-nautilus.io
 ```
 
-### 5. Create the required Kubernetes secrets
-
-The deployment reads LLM API keys from three secrets. Create them in your namespace before deploying:
+8. **Create the required Kubernetes secret**:
 
 ```bash
-# NRP LLM proxy key
 kubectl create secret generic llm-proxy-secrets \
   --from-literal=proxy-key=YOUR_PROXY_KEY
 ```
 
-### 6. Deploy
+9. **Deploy**:
 
 ```bash
-kubectl apply -f k8s/configmap.yaml
-kubectl apply -f k8s/deployment.yaml
-kubectl apply -f k8s/service.yaml
-kubectl apply -f k8s/ingress.yaml
+kubectl apply -f k8s/k8s/configmap.yaml
+kubectl apply -f k8s/k8s/deployment.yaml
+kubectl apply -f k8s/k8s/service.yaml
+kubectl apply -f k8s/k8s/ingress.yaml
 ```
 
-Check rollout status:
-
-```bash
-kubectl rollout status deployment/my-app
-kubectl get pods
-kubectl get ingress
-```
-
-After pushing changes to your repo, redeploy by restarting the deployment (the init container re-clones the repo):
+After pushing changes, redeploy (the init container re-clones your repo):
 
 ```bash
 kubectl rollout restart deployment/my-app
 ```
 
-## Local development
+### Local development
 
 ```bash
-# Serve the app locally
+cd k8s
 python -m http.server 8000
 
-# Create a minimal config.json so the LLM works (no secret injection locally):
+# Create a minimal config.json so the LLM works locally:
 cat > config.json <<'EOF'
 {
   "llm_models": [
@@ -160,24 +139,63 @@ cat > config.json <<'EOF'
 EOF
 ```
 
-Then open `http://localhost:8000`.
+---
 
-## Repository structure
+## Configuring your datasets
+
+Browse available data in the STAC catalog:
 
 ```
-index.html          ← HTML shell — loads core JS/CSS from CDN
-layers-input.json   ← which STAC collections + assets this app shows
-system-prompt.md    ← LLM system prompt (customize per app)
-k8s/
-  configmap.yaml    ← LLM config template + nginx config
-  deployment.yaml   ← init container clones this repo; nginx serves it
-  service.yaml      ← ClusterIP service
-  ingress.yaml      ← hostname + TLS
+https://radiantearth.github.io/stac-browser/#/external/s3-west.nrp-nautilus.io/public-data/stac/catalog.json
 ```
 
-## How the deployment works
+### `layers-input.json` reference
 
-At deploy time the Kubernetes Pod runs an **init container** that clones your GitHub repo into a shared volume. The main `nginx` container then serves those static files. The `config.json` (containing API keys) is rendered at startup via `envsubst` from a ConfigMap template + Kubernetes secrets — it is never stored in the repo.
+```json
+{
+    "catalog": "https://s3-west.nrp-nautilus.io/public-data/stac/catalog.json",
+    "titiler_url": "https://titiler.nrp-nautilus.io",
+    "mcp_url": "https://duckdb-mcp.nrp-nautilus.io/mcp",
+    "view": { "center": [-119.4, 36.8], "zoom": 6 },
+    "collections": [
+        "some-collection",
+        {
+            "collection_id": "another-collection",
+            "assets": [
+                "asset-id-1",
+                {
+                    "id": "asset-id-2",
+                    "display_name": "Friendly Name",
+                    "visible": true,
+                    "default_style": {
+                        "fill-color": ["match", ["get", "MyColumn"],
+                            "A", "#ff0000", "B", "#00ff00", "#888888"],
+                        "fill-opacity": 0.7
+                    },
+                    "default_filter": ["match", ["get", "MyColumn"], ["A", "B"], true, false],
+                    "tooltip_fields": ["Name", "MyColumn"]
+                }
+            ]
+        }
+    ]
+}
+```
 
-`main.js` (loaded from CDN) fetches `layers-input.json`, `system-prompt.md`, and `config.json` from the same origin as the page. This means every configuration change just requires a `kubectl rollout restart` — no image rebuilds.
+- A bare **string** collection entry loads all visual assets
+- An **object** entry with `assets` cherry-picks specific STAC asset IDs
+- `visible`: show layer on by default (default: false)
+- `default_style`: MapLibre paint expression applied at load
+- `default_filter`: MapLibre filter expression applied at load — use `["match", ["get", "col"], ["val1", "val2"], true, false]` for list membership (do **not** use the legacy `["in", ...]` form)
+- `tooltip_fields`: property names shown on hover
 
+## How it works
+
+`index.html` loads the core library from jsDelivr CDN. To pin to a stable release:
+
+```html
+<script type="module" src="https://cdn.jsdelivr.net/gh/boettiger-lab/geo-agent@v1.0.0/app/main.js"></script>
+```
+
+At runtime `main.js` fetches `layers-input.json`, `system-prompt.md`, and `config.json` from the same origin as the page — so each deployment provides its own configuration while sharing the same application code.
+
+See [boettiger-lab/geo-agent](https://github.com/boettiger-lab/geo-agent) for the core library source and live examples.
