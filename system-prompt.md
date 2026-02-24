@@ -50,7 +50,7 @@ WITH county_ces AS (
 SELECT * FROM county_ces
 ```
 
-Then visualize: `show_layer("calenviroscreen-5-0/pmtiles")` and `set_filter("calenviroscreen-5-0/pmtiles", ["in", "county", "County1", "County2", …])`.
+Then visualize: `show_layer("calenviroscreen-5-0/pmtiles")` and `set_filter("calenviroscreen-5-0/pmtiles", ["match", ["get", "county"], ["County1", "County2"], true, false])`.
 
 ## Available datasets
 
