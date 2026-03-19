@@ -21,6 +21,8 @@ This file provides machine-readable guidance for AI agents creating or modifying
 | `view` | No | object | `{ "center": [lon, lat], "zoom": z }` |
 | `titiler_url` | No | string | TiTiler server for COG rasters (default: `https://titiler.nrp-nautilus.io`) |
 | `mcp_url` | No | string | MCP/DuckDB server URL for SQL analytics |
+
+> **Security note:** The private MCP server (`https://private-duckdb-mcp.nrp-nautilus.io/mcp`) requires a bearer token (`MCP_AUTH_TOKEN`) and is restricted to authorized apps only. Do **not** set `mcp_url` to the private server or inject `MCP_AUTH_TOKEN` into a new app's k8s deployment without explicit authorization.
 | `llm` | No | object | LLM config for user-provided key mode (see below) |
 | `welcome` | No | object | `{ "message": "...", "examples": ["...", "..."] }` |
 
@@ -30,7 +32,7 @@ Each `collections` entry is a bare string (loads all visual assets) or an object
 
 | Field | Type | Description |
 |---|---|---|
-| `collection_id` | string | STAC collection ID |
+| `collection_id` | string | **Must exactly match the `"id"` field in the STAC collection JSON** — not a label you invent. Verify before use (see below). |
 | `collection_url` | string | Direct STAC collection JSON URL — bypasses root catalog traversal |
 | `group` | string | Layer toggle group label |
 | `assets` | array | Asset selector (see below). Omit to load all visual assets. |
@@ -89,15 +91,26 @@ Each `assets` entry is a bare string (the STAC asset key) or a config object:
 
 Only use `"layer_type": "line"` when the STAC asset explicitly contains LineString or MultiLineString features (e.g., road networks, rivers).
 
-## Finding STAC asset IDs
+## Finding collection IDs and asset IDs
 
-Browse the catalog:
+**Always fetch the STAC collection JSON and verify — never guess.** The `collection_id` must match the STAC `"id"` field exactly; a mismatch causes layers to silently not appear. Run this one-liner when you have the collection URL:
+
+```bash
+curl -s <collection_url> | python3 -c "
+import json, sys
+d = json.load(sys.stdin)
+print('collection_id:', d['id'])
+print('asset ids:', list(d.get('assets', {}).keys()))
+"
+```
+
+Alternatively, browse the catalog in STAC Browser:
 
 ```
 https://radiantearth.github.io/stac-browser/#/external/s3-west.nrp-nautilus.io/public-data/stac/catalog.json
 ```
 
-Open a collection → **Assets** tab. The keys there (e.g., `"pmtiles"`, `"v2-total-2024-cog"`) are the `id` values. For PMTiles, the asset's `vector:layers` field lists internal layer names — the app reads this automatically, no manual config needed.
+Open a collection → the collection `id` is shown at the top. Under **Assets**, the keys (e.g., `"pmtiles"`, `"v2-total-2024-cog"`) are the `id` values for asset entries. For PMTiles, the asset's `vector:layers` field lists internal layer names — the app reads this automatically, no manual config needed.
 
 ## MapLibre filter syntax
 
