@@ -66,7 +66,7 @@ Each `assets` entry is a bare string (the STAC asset key) or a config object:
 | `visible` | boolean | Default visibility (default: `false`) |
 | `default_style` | object | MapLibre fill paint properties |
 | `outline_style` | object | MapLibre line paint for an auto-added outline layer |
-| `layer_type` | `"line"` | **Only for true LineString features** — see warning below |
+| `layer_type` | `"line"` or `"circle"` | `"line"` for LineString features; `"circle"` for Point features — see warning below |
 | `default_filter` | array | MapLibre filter expression at load time |
 | `tooltip_fields` | array | Property names shown on feature hover |
 | `group` | string | Override collection-level group for this layer |
@@ -107,7 +107,9 @@ Each `assets` entry is a bare string (the STAC asset key) or a config object:
 }
 ```
 
-Only use `"layer_type": "line"` when the STAC asset explicitly contains LineString or MultiLineString features (e.g., road networks, rivers).
+Only set `layer_type` when the tile features match the geometry type:
+- `"line"` — LineString/MultiLineString features (roads, rivers, transects)
+- `"circle"` — Point/MultiPoint features (observations, stations, events)
 
 ---
 
