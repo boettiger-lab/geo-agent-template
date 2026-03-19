@@ -1,6 +1,20 @@
 # AI Agent Guide — geo-agent-template
 
-This file provides machine-readable guidance for AI agents creating or modifying a geo-agent app.
+## Repo relationship
+
+This is a **template repo** for creating geo-agent map applications. The core library lives at [boettiger-lab/geo-agent](https://github.com/boettiger-lab/geo-agent) and is loaded from CDN — you never modify it here.
+
+| Repo | Purpose |
+|---|---|
+| `geo-agent` | Core library (map, chat, agent, tools). Source of truth for all functionality. |
+| `geo-agent-template` | Starter template. Users fork this and configure three files for their dataset. |
+
+**Full docs:** [boettiger-lab.github.io/geo-agent/docs](https://boettiger-lab.github.io/geo-agent/docs/)
+— includes the complete configuration reference, deployment guide, and agent loop internals.
+
+The schema below is kept inline so you can work without a network fetch. If it conflicts with the docs, the docs are authoritative.
+
+---
 
 ## What you configure (and what you don't)
 
@@ -9,6 +23,8 @@ This file provides machine-readable guidance for AI agents creating or modifying
 **You do not write JavaScript.** The core map, chat, agent, and tool modules are loaded from the CDN. Do not create or modify JS files in a client app repo.
 
 **Do not duplicate STAC descriptions in `system-prompt.md`.** Dataset titles, descriptions, column schemas, and parquet paths are automatically injected into the LLM system prompt from the STAC catalog at startup. Only add domain-specific guidance, SQL examples, or interaction style notes to `system-prompt.md`.
+
+---
 
 ## Full `layers-input.json` schema
 
@@ -21,10 +37,10 @@ This file provides machine-readable guidance for AI agents creating or modifying
 | `view` | No | object | `{ "center": [lon, lat], "zoom": z }` |
 | `titiler_url` | No | string | TiTiler server for COG rasters (default: `https://titiler.nrp-nautilus.io`) |
 | `mcp_url` | No | string | MCP/DuckDB server URL for SQL analytics |
-
-> **Security note:** The private MCP server (`https://private-duckdb-mcp.nrp-nautilus.io/mcp`) requires a bearer token (`MCP_AUTH_TOKEN`) and is restricted to authorized apps only. Do **not** set `mcp_url` to the private server or inject `MCP_AUTH_TOKEN` into a new app's k8s deployment without explicit authorization.
 | `llm` | No | object | LLM config for user-provided key mode (see below) |
 | `welcome` | No | object | `{ "message": "...", "examples": ["...", "..."] }` |
+
+> **Security note:** The private MCP server (`https://private-duckdb-mcp.nrp-nautilus.io/mcp`) requires a bearer token (`MCP_AUTH_TOKEN`) and is restricted to authorized apps only. Do **not** set `mcp_url` to the private server or inject `MCP_AUTH_TOKEN` into a new app's k8s deployment without explicit authorization.
 
 ### Collection-level fields
 
@@ -67,6 +83,8 @@ Each `assets` entry is a bare string (the STAC asset key) or a config object:
 | `legend_label` | string | Legend label |
 | `legend_type` | string | `"categorical"` to use STAC `classification:classes` colors |
 
+---
+
 ## Critical: `layer_type` vs `outline_style`
 
 **Never use `"layer_type": "line"` to draw polygon outlines.** This tells the renderer the tile features are LineString geometries. On a polygon-feature PMTiles file, it causes MapLibre to silently render nothing.
@@ -91,6 +109,8 @@ Each `assets` entry is a bare string (the STAC asset key) or a config object:
 
 Only use `"layer_type": "line"` when the STAC asset explicitly contains LineString or MultiLineString features (e.g., road networks, rivers).
 
+---
+
 ## Finding collection IDs and asset IDs
 
 **Always fetch the STAC collection JSON and verify — never guess.** The `collection_id` must match the STAC `"id"` field exactly; a mismatch causes layers to silently not appear. Run this one-liner when you have the collection URL:
@@ -112,6 +132,8 @@ https://radiantearth.github.io/stac-browser/#/external/s3-west.nrp-nautilus.io/p
 
 Open a collection → the collection `id` is shown at the top. Under **Assets**, the keys (e.g., `"pmtiles"`, `"v2-total-2024-cog"`) are the `id` values for asset entries. For PMTiles, the asset's `vector:layers` field lists internal layer names — the app reads this automatically, no manual config needed.
 
+---
+
 ## MapLibre filter syntax
 
 Use the modern `match` form for list membership:
@@ -121,6 +143,8 @@ Use the modern `match` form for list membership:
 ```
 
 Do **not** use the legacy `["in", "ColumnName", "value1", "value2"]` form — it is silently ignored by current MapLibre.
+
+---
 
 ## LLM config (user-provided key mode)
 
