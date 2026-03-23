@@ -122,9 +122,13 @@ curl -s <collection_url> | python3 -c "
 import json, sys
 d = json.load(sys.stdin)
 print('collection_id:', d['id'])
-print('asset ids:', list(d.get('assets', {}).keys()))
+for k, v in d.get('assets', {}).items():
+    vl = v.get('vector:layers', 'MISSING')
+    print(f'  asset: {k}  type: {v.get(\"type\",\"\")}  vector:layers: {vl}')
 "
 ```
+
+This also checks `vector:layers` on each PMTiles asset. If it shows `MISSING`, the STAC collection needs to be patched before the layer will render — the app falls back to the asset key as the source-layer name, which is almost always wrong.
 
 Alternatively, browse the catalog in STAC Browser:
 
@@ -133,6 +137,38 @@ https://radiantearth.github.io/stac-browser/#/external/s3-west.nrp-nautilus.io/p
 ```
 
 Open a collection → the collection `id` is shown at the top. Under **Assets**, the keys (e.g., `"pmtiles"`, `"v2-total-2024-cog"`) are the `id` values for asset entries. For PMTiles, the asset's `vector:layers` field lists internal layer names — the app reads this automatically, no manual config needed.
+
+### Verifying PMTiles fields for `tooltip_fields` and `default_filter`
+
+PMTiles tiles contain only a subset of the parquet columns — tippecanoe selects fields at tile-build time. **Do not assume field names from the STAC `table:columns` schema are available in the tiles.** Before setting `tooltip_fields` or `default_filter`, inspect the PMTiles metadata directly:
+
+```bash
+python3 -c "
+import urllib.request, struct, json
+url = '<pmtiles_url>'
+req = urllib.request.Request(url, headers={'Range': 'bytes=0-16383'})
+data = urllib.request.urlopen(req).read()
+off = struct.unpack_from('<Q', data, 24)[0]
+ln  = struct.unpack_from('<Q', data, 32)[0]
+req2 = urllib.request.Request(url, headers={'Range': f'bytes={off}-{off+ln-1}'})
+meta = json.loads(urllib.request.urlopen(req2).read())
+for layer in meta.get('vector_layers', []):
+    print('layer name:', layer['id'])
+    print('fields:', list(layer.get('fields', {}).keys()))
+"
+```
+
+The `vector_layers[].id` value is the internal layer name (must be present in `vector:layers` in the STAC asset). The `vector_layers[].fields` keys are the only field names valid for `tooltip_fields` and `default_filter`.
+
+---
+
+## Troubleshooting: layer not appearing in the overlay list
+
+Two common causes:
+
+1. **`collection_id` mismatch** — the value in `layers-input.json` does not match the STAC collection's actual `"id"` field. Run the one-liner above and compare. The framework silently drops the collection if the IDs don't match.
+
+2. **Wrong source-layer name** — the `vector:layers` field in the STAC asset is missing or incorrect, so the app uses the asset key as the source-layer name and MapLibre finds no matching layer in the tiles. Check `vector:layers` with the one-liner above, and verify it matches the `vector_layers[].id` value from the PMTiles metadata script.
 
 ---
 
