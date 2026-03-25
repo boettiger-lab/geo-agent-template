@@ -117,14 +117,46 @@ Only set `layer_type` when the tile features match the geometry type:
 
 **Always fetch the STAC collection JSON and verify — never guess.** The `collection_id` must match the STAC `"id"` field exactly; a mismatch causes layers to silently not appear. Run this one-liner when you have the collection URL:
 
+### Nested / hierarchical collections
+
+Some catalog entries are **parent collections** that contain sub-collections as `"child"` links, not assets of their own. The framework only traverses **direct children of the root catalog** — it does not recurse into parent collections to find nested sub-collections.
+
+**Symptom:** you set a `collection_id` that exists in STAC but the layer never appears. The collection is a child of a parent collection, not of the root catalog.
+
+**Fix:** always inspect the `links` array of every collection you encounter, and use `collection_url` to point directly to the sub-collection JSON URL:
+
+```python
+import urllib.request, json
+url = "<parent_collection_url>"
+d = json.loads(urllib.request.urlopen(url).read())
+print("id:", d["id"])
+for l in d.get("links", []):
+    if l.get("rel") == "child":
+        print("  child:", l["href"], "|", l.get("title",""))
+```
+
+Then in `layers-input.json`, set both `collection_id` (the exact STAC `"id"`) and `collection_url` (the direct URL) so the framework bypasses root-catalog traversal:
+
+```json
+{
+    "collection_id": "pad-us-4.1-fee",
+    "collection_url": "https://s3-west.nrp-nautilus.io/public-padus/padus-4-1/fee/stac-collection.json",
+    "assets": [...]
+}
+```
+
 ```bash
 curl -s <collection_url> | python3 -c "
 import json, sys
 d = json.load(sys.stdin)
 print('collection_id:', d['id'])
-print('asset ids:', list(d.get('assets', {}).keys()))
+for k, v in d.get('assets', {}).items():
+    vl = v.get('vector:layers', 'MISSING')
+    print(f'  asset: {k}  type: {v.get(\"type\",\"\")}  vector:layers: {vl}')
 "
 ```
+
+This also checks `vector:layers` on each PMTiles asset. If it shows `MISSING`, the STAC collection needs to be patched before the layer will render — the app falls back to the asset key as the source-layer name, which is almost always wrong.
 
 Alternatively, browse the catalog in STAC Browser:
 
@@ -133,6 +165,38 @@ https://radiantearth.github.io/stac-browser/#/external/s3-west.nrp-nautilus.io/p
 ```
 
 Open a collection → the collection `id` is shown at the top. Under **Assets**, the keys (e.g., `"pmtiles"`, `"v2-total-2024-cog"`) are the `id` values for asset entries. For PMTiles, the asset's `vector:layers` field lists internal layer names — the app reads this automatically, no manual config needed.
+
+### Verifying PMTiles fields for `tooltip_fields` and `default_filter`
+
+PMTiles tiles contain only a subset of the parquet columns — tippecanoe selects fields at tile-build time. **Do not assume field names from the STAC `table:columns` schema are available in the tiles.** Before setting `tooltip_fields` or `default_filter`, inspect the PMTiles metadata directly:
+
+```bash
+python3 -c "
+import urllib.request, struct, json
+url = '<pmtiles_url>'
+req = urllib.request.Request(url, headers={'Range': 'bytes=0-16383'})
+data = urllib.request.urlopen(req).read()
+off = struct.unpack_from('<Q', data, 24)[0]
+ln  = struct.unpack_from('<Q', data, 32)[0]
+req2 = urllib.request.Request(url, headers={'Range': f'bytes={off}-{off+ln-1}'})
+meta = json.loads(urllib.request.urlopen(req2).read())
+for layer in meta.get('vector_layers', []):
+    print('layer name:', layer['id'])
+    print('fields:', list(layer.get('fields', {}).keys()))
+"
+```
+
+The `vector_layers[].id` value is the internal layer name (must be present in `vector:layers` in the STAC asset). The `vector_layers[].fields` keys are the only field names valid for `tooltip_fields` and `default_filter`.
+
+---
+
+## Troubleshooting: layer not appearing in the overlay list
+
+Two common causes:
+
+1. **`collection_id` mismatch** — the value in `layers-input.json` does not match the STAC collection's actual `"id"` field. Run the one-liner above and compare. The framework silently drops the collection if the IDs don't match.
+
+2. **Wrong source-layer name** — the `vector:layers` field in the STAC asset is missing or incorrect, so the app uses the asset key as the source-layer name and MapLibre finds no matching layer in the tiles. Check `vector:layers` with the one-liner above, and verify it matches the `vector_layers[].id` value from the PMTiles metadata script.
 
 ---
 
