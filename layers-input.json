@@ -3,26 +3,138 @@
     "titiler_url": "https://titiler.nrp-nautilus.io",
     "mcp_url": "https://duckdb-mcp.nrp-nautilus.io/mcp",
     "view": {
-        "center": [-119.4179, 36.7783],
-        "zoom": 6
+        "center": [
+            -98,
+            39
+        ],
+        "zoom": 4
     },
-
-    "_llm_note": "Uncomment the llm block below for GitHub Pages / static hosting (no server secrets). For Kubernetes, delete it — the k8s/ manifests inject config.json with API keys at deploy time.",
     "llm": {
         "user_provided": true,
         "default_endpoint": "https://openrouter.ai/api/v1",
         "models": [
-            { "value": "anthropic/claude-sonnet-4", "label": "Claude Sonnet" },
-            { "value": "google/gemini-2.5-flash", "label": "Gemini Flash" },
-            { "value": "openai/gpt-4.1-mini", "label": "GPT-4.1 mini" }
+            {
+                "value": "qwen/qwen3-235b-a22b",
+                "label": "Qwen3 235B"
+            },
+            {
+                "value": "moonshotai/kimi-k2",
+                "label": "Kimi K2"
+            },
+            {
+                "value": "minimax/minimax-m1",
+                "label": "MiniMax M1"
+            },
+            {
+                "value": "anthropic/claude-sonnet-4",
+                "label": "Claude Sonnet"
+            },
+            {
+                "value": "google/gemini-2.5-flash",
+                "label": "Gemini Flash"
+            }
         ]
     },
-
+    "welcome": {
+        "message": "Hi! I can help you explore protected areas and carbon data. Try asking:",
+        "examples": [
+            "Tell me about the datasets you have access to.",
+            "Show only GAP Status 1 lands on the map.",
+            "What are the top 10 counties by total protected area?",
+            "Color the fee lands by management type."
+        ]
+    },
     "collections": [
         {
-            "collection_id": "calenviroscreen-5-0",
+            "collection_id": "pad-us-4.1-fee",
+            "collection_url": "https://s3-west.nrp-nautilus.io/public-padus/padus-4-1/fee/stac-collection.json",
             "assets": [
-                "pmtiles"
+                {
+                    "id": "fee-pmtiles",
+                    "display_name": "Fee Lands",
+                    "visible": true,
+                    "default_style": {
+                        "fill-color": [
+                            "match",
+                            [
+                                "get",
+                                "GAP_Sts"
+                            ],
+                            "1",
+                            "#26633A",
+                            "2",
+                            "#3E9C47",
+                            "3",
+                            "#7EB3D3",
+                            "4",
+                            "#BDBDBD",
+                            "#888888"
+                        ],
+                        "fill-opacity": 0.7
+                    },
+                    "default_filter": [
+                        "match",
+                        [
+                            "get",
+                            "GAP_Sts"
+                        ],
+                        [
+                            "1",
+                            "2"
+                        ],
+                        true,
+                        false
+                    ],
+                    "tooltip_fields": [
+                        "Unit_Nm",
+                        "GAP_Sts",
+                        "Mang_Type"
+                    ]
+                }
+            ]
+        },
+        {
+            "collection_id": "pad-us-4.1-easement",
+            "collection_url": "https://s3-west.nrp-nautilus.io/public-padus/padus-4-1/easement/stac-collection.json",
+            "assets": [
+                {
+                    "id": "easement-pmtiles",
+                    "display_name": "Easements",
+                    "visible": false,
+                    "default_style": {
+                        "fill-color": [
+                            "match",
+                            [
+                                "get",
+                                "GAP_Sts"
+                            ],
+                            "1",
+                            "#26633A",
+                            "2",
+                            "#3E9C47",
+                            "3",
+                            "#7EB3D3",
+                            "4",
+                            "#BDBDBD",
+                            "#888888"
+                        ],
+                        "fill-opacity": 0.7
+                    },
+                    "tooltip_fields": [
+                        "Unit_Nm",
+                        "GAP_Sts",
+                        "Mang_Type"
+                    ]
+                }
+            ]
+        },
+        {
+            "collection_id": "irrecoverable-carbon",
+            "assets": [
+                {
+                    "id": "v2-vulnerable-2024-cog",
+                    "display_name": "Vulnerable Carbon (2024)"
+                }
             ]
         }
     ]

@@ -117,6 +117,34 @@ Only set `layer_type` when the tile features match the geometry type:
 
 **Always fetch the STAC collection JSON and verify — never guess.** The `collection_id` must match the STAC `"id"` field exactly; a mismatch causes layers to silently not appear. Run this one-liner when you have the collection URL:
 
+### Nested / hierarchical collections
+
+Some catalog entries are **parent collections** that contain sub-collections as `"child"` links, not assets of their own. The framework only traverses **direct children of the root catalog** — it does not recurse into parent collections to find nested sub-collections.
+
+**Symptom:** you set a `collection_id` that exists in STAC but the layer never appears. The collection is a child of a parent collection, not of the root catalog.
+
+**Fix:** always inspect the `links` array of every collection you encounter, and use `collection_url` to point directly to the sub-collection JSON URL:
+
+```python
+import urllib.request, json
+url = "<parent_collection_url>"
+d = json.loads(urllib.request.urlopen(url).read())
+print("id:", d["id"])
+for l in d.get("links", []):
+    if l.get("rel") == "child":
+        print("  child:", l["href"], "|", l.get("title",""))
+```
+
+Then in `layers-input.json`, set both `collection_id` (the exact STAC `"id"`) and `collection_url` (the direct URL) so the framework bypasses root-catalog traversal:
+
+```json
+{
+    "collection_id": "pad-us-4.1-fee",
+    "collection_url": "https://s3-west.nrp-nautilus.io/public-padus/padus-4-1/fee/stac-collection.json",
+    "assets": [...]
+}
+```
+
 ```bash
 curl -s <collection_url> | python3 -c "
 import json, sys
