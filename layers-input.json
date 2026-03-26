@@ -52,6 +52,7 @@
                 {
                     "id": "fee-pmtiles",
                     "display_name": "Fee Lands",
+                    "group": "Protected Areas",
                     "visible": true,
                     "default_style": {
                         "fill-color": [
@@ -100,6 +101,7 @@
                 {
                     "id": "easement-pmtiles",
                     "display_name": "Easements",
+                    "group": "Protected Areas",
                     "visible": false,
                     "default_style": {
                         "fill-color": [
@@ -133,7 +135,23 @@
             "assets": [
                 {
                     "id": "v2-vulnerable-2024-cog",
-                    "display_name": "Vulnerable Carbon (2024)"
+                    "display_name": "Vulnerable Carbon (2024)",
+                    "group": "Carbon",
+                    "colormap": "reds",
+                    "rescale": "0,150",
+                    "legend_label": "Mg C / ha"
+                }
+            ]
+        },
+        {
+            "collection_id": "wetlands-global-unified",
+            "collection_url": "https://s3-west.nrp-nautilus.io/public-wetlands/stac-collection.json",
+            "assets": [
+                {
+                    "id": "glwd-main-class-cog",
+                    "display_name": "Wetland Type (GLWD)",
+                    "group": "Land Cover",
+                    "legend_type": "categorical"
                 }
             ]
         }
