@@ -2,14 +2,20 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: calenviroscreen-config
+  name: padus-config
 data:
   config.template.json: |
     {
         "mcp_server_url": "${MCP_SERVER_URL}",
         "mcp_auth_token": "${MCP_AUTH_TOKEN}",
-        "llm_model": "minimax-m2",
+        "llm_model": "nimbus",
         "llm_models": [
+            {
+                "value": "nimbus",
+                "label": "NRP Nimbus",
+                "endpoint": "${NIMBUS_ENDPOINT}",
+                "api_key": "${NIMBUS_API_KEY}"
+            },
             {
                 "value": "glm-4.7",
                 "label": "NRP GLM-4.7",
@@ -48,7 +54,7 @@ data:
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: calenviroscreen-nginx
+  name: padus-nginx
 data:
   nginx.conf: |
     server {
