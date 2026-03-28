@@ -53,13 +53,6 @@ spec:
             secretKeyRef:
               name: llm-proxy-secrets
               key: proxy-key
-        - name: NIMBUS_ENDPOINT
-          value: "https://llm-proxy.nrp-nautilus.io/v1"
-        - name: NIMBUS_API_KEY
-          valueFrom:
-            secretKeyRef:
-              name: nimbus-api-key
-              key: NIMBUS_API_KEY
         - name: OPENROUTER_KEY
           valueFrom:
             secretKeyRef:

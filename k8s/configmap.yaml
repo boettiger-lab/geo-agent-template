@@ -8,13 +8,13 @@ data:
     {
         "mcp_server_url": "${MCP_SERVER_URL}",
         "mcp_auth_token": "${MCP_AUTH_TOKEN}",
-        "llm_model": "nimbus",
+        "llm_model": "nemotron",
         "llm_models": [
             {
-                "value": "nimbus",
-                "label": "NRP Nimbus",
-                "endpoint": "${NIMBUS_ENDPOINT}",
-                "api_key": "${NIMBUS_API_KEY}"
+                "value": "nemotron",
+                "label": "NRP Nemotron",
+                "endpoint": "${LLM_ENDPOINT}",
+                "api_key": "${PROXY_KEY}"
             },
             {
                 "value": "glm-4.7",
