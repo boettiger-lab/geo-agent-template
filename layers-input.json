@@ -40,7 +40,7 @@
         "examples": [
             "Tell me about the datasets you have access to.",
             "Show only GAP Status 1 lands on the map.",
-            "What are the top 10 counties by total protected area?",
+            "Which states have the most PAD-US fee-protected land (in acres)?",
             "Color the fee lands by management type."
         ]
     },
