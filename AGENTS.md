@@ -43,6 +43,67 @@ Instead, add a "Discovering data" section directing the agent to call `list_data
 
 ---
 
+## Deployment
+
+Full guide: [boettiger-lab.github.io/geo-agent/docs/guide/deployment](https://boettiger-lab.github.io/geo-agent/docs/guide/deployment)
+
+**Read the sections below before fetching that URL** — they cover the two common k8s patterns. Fetch the docs only if you need details beyond what's here (e.g., GitHub Pages, Hugging Face Spaces, private data modules).
+
+> **If you lack credentials or permissions** to run `kubectl` or `git push`, do not attempt to discover or work around credentials. Instead, provide the user with the exact commands to run.
+
+### Public repo (k8s git-clone pattern)
+
+The pod's init container clones the GitHub repo at startup. **Push to GitHub first, then restart.**
+
+```bash
+git add <files> && git commit -m "<message>" && git push
+kubectl rollout restart deployment/<app-name> -n <namespace>
+kubectl rollout status deployment/<app-name> -n <namespace>
+```
+
+Restarting without pushing first serves stale code.
+
+### Private repo (ConfigMap pattern)
+
+When the GitHub repo is private, the pod reads content from a k8s ConfigMap instead of git-cloning. **Never edit `k8s/content-configmap.yaml` directly** — it is generated from source files.
+
+```bash
+# 1. Edit source files (index.html, layers-input.json, system-prompt.md)
+# 2. Regenerate the ConfigMap
+bash scripts/generate-configmap.sh
+# 3. Apply and restart
+kubectl apply -f k8s/content-configmap.yaml -n <namespace>
+kubectl rollout restart deployment/<app-name> -n <namespace>
+kubectl rollout status deployment/<app-name> -n <namespace>
+# 4. Commit and push source files (not just the generated configmap)
+git add <source-files> k8s/content-configmap.yaml && git commit -m "<message>" && git push
+```
+
+The git push does **not** update running pods — step 3 does. Skipping `generate-configmap.sh` and re-applying serves the old ConfigMap.
+
+For private data modules (rclone sidecar, oauth2-proxy, private parquet credentials): [docs/guide/private-deployment](https://boettiger-lab.github.io/geo-agent/docs/guide/private-deployment)
+
+### CDN versioning
+
+`index.html` pins the geo-agent library version:
+
+```html
+<!-- Pinned — immutable, recommended for production -->
+<script type="module" src="https://cdn.jsdelivr.net/gh/boettiger-lab/geo-agent@v3.0.2/app/main.js"></script>
+
+<!-- Latest main — staging/development only -->
+<script type="module" src="https://cdn.jsdelivr.net/gh/boettiger-lab/geo-agent@main/app/main.js"></script>
+```
+
+To upgrade: change the tag in `index.html` and redeploy. **Verify jsDelivr serves the new tag before deploying** — new tags can take up to an hour to be indexed:
+
+```bash
+curl -sI https://cdn.jsdelivr.net/gh/boettiger-lab/geo-agent@vX.Y.Z/app/style.css | grep HTTP
+# Must return HTTP/2 200 — a 404 means jsDelivr hasn't indexed the tag yet
+```
+
+---
+
 ## Full `layers-input.json` schema
 
 ### Top-level fields
