@@ -49,6 +49,8 @@ Full guide: [boettiger-lab.github.io/geo-agent/docs/guide/deployment](https://bo
 
 **Read the sections below before fetching that URL** — they cover the two common k8s patterns. Fetch the docs only if you need details beyond what's here (e.g., GitHub Pages, Hugging Face Spaces, private data modules).
 
+> **If you lack credentials or permissions** to run `kubectl` or `git push`, do not attempt to discover or work around credentials. Instead, provide the user with the exact commands to run.
+
 ### Public repo (k8s git-clone pattern)
 
 The pod's init container clones the GitHub repo at startup. **Push to GitHub first, then restart.**
