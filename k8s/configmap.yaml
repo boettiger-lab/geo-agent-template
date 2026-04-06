@@ -18,7 +18,7 @@ data:
             },
             {
                 "value": "nemotron",
-                "label": "NRP Nemotron",
+                "label": "DSE Nemotron",
                 "endpoint": "${LLM_ENDPOINT}",
                 "api_key": "${PROXY_KEY}"
             },
