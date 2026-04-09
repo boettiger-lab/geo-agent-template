@@ -118,7 +118,7 @@ curl -sI https://cdn.jsdelivr.net/gh/boettiger-lab/geo-agent@vX.Y.Z/app/style.cs
 | `llm` | No | object | LLM config for user-provided key mode (see below) |
 | `welcome` | No | object | `{ "message": "...", "examples": ["...", "..."] }` |
 
-> **Security note:** The private MCP server (`https://private-duckdb-mcp.nrp-nautilus.io/mcp`) requires a bearer token (`MCP_AUTH_TOKEN`) and is restricted to authorized apps only. Do **not** set `mcp_url` to the private server or inject `MCP_AUTH_TOKEN` into a new app's k8s deployment without explicit authorization.
+> **Security note:** The public MCP server (`https://duckdb-mcp.nrp-nautilus.io/mcp`) is open — no auth token is required or set. The `mcp-data-server` supports optional bearer token auth: if `MCP_AUTH_TOKEN` is set in the server's environment it enforces auth on all requests; if unset, the server is open. The active deployment does not set `MCP_AUTH_TOKEN`, so no token is needed in client apps.
 
 ### Collection-level fields
 

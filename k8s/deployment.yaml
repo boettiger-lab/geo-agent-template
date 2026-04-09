@@ -53,17 +53,6 @@ spec:
             secretKeyRef:
               name: open-llm-proxy-secrets
               key: proxy-key
-        - name: OPENROUTER_KEY
-          valueFrom:
-            secretKeyRef:
-              name: openrouter-key
-              key: OPENROUTER_KEY
-        - name: MCP_AUTH_TOKEN
-          valueFrom:
-            secretKeyRef:
-              name: mcp-private-secrets
-              key: mcp-auth-token
-              optional: true
         command:
         - sh
         - -c
