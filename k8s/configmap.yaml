@@ -1,4 +1,11 @@
-# LLM config template — API keys injected from k8s secrets at deploy time
+# LLM config template — NO SECRETS.
+#
+# The upstream LLM proxy key lives only in the nginx config (see
+# `padus-nginx` below), which injects the Authorization header
+# server-side via `proxy_set_header`. The browser only sees a relative
+# `/api/llm` endpoint and never holds the key.
+#
+# See ../../geo-agent-ops/SECRETS_EXPOSURE.md for the migration plan.
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -12,56 +19,59 @@ data:
             {
                 "value": "gemma",
                 "label": "NRP Gemma",
-                "endpoint": "${LLM_ENDPOINT}",
-                "api_key": "${PROXY_KEY}"
+                "endpoint": "/api/llm",
+                "api_key": "unused"
             },
             {
                 "value": "nemotron",
                 "label": "DSE Nemotron",
-                "endpoint": "${LLM_ENDPOINT}",
-                "api_key": "${PROXY_KEY}"
+                "endpoint": "/api/llm",
+                "api_key": "unused"
             },
             {
                 "value": "glm-4.7",
                 "label": "NRP GLM-4.7",
-                "endpoint": "${LLM_ENDPOINT}",
-                "api_key": "${PROXY_KEY}"
+                "endpoint": "/api/llm",
+                "api_key": "unused"
             },
             {
                 "value": "qwen3",
                 "label": "NRP Qwen3",
-                "endpoint": "${LLM_ENDPOINT}",
-                "api_key": "${PROXY_KEY}"
+                "endpoint": "/api/llm",
+                "api_key": "unused"
             },
             {
                 "value": "gpt-oss",
                 "label": "NRP GPT-OSS 120B",
-                "endpoint": "${LLM_ENDPOINT}",
-                "api_key": "${PROXY_KEY}"
+                "endpoint": "/api/llm",
+                "api_key": "unused"
             },
             {
                 "value": "kimi",
                 "label": "NRP Kimi K2.5",
-                "endpoint": "${LLM_ENDPOINT}",
-                "api_key": "${PROXY_KEY}"
+                "endpoint": "/api/llm",
+                "api_key": "unused"
             },
             {
                 "value": "minimax-m2",
                 "label": "NRP MiniMax M2.5",
-                "endpoint": "${LLM_ENDPOINT}",
-                "api_key": "${PROXY_KEY}"
+                "endpoint": "/api/llm",
+                "api_key": "unused"
             }
         ]
     }
 
 ---
-# Nginx configuration
+# Nginx configuration — reverse-proxies /api/llm/ to open-llm-proxy and
+# injects the Authorization header from ${PROXY_KEY} at container start
+# (the startup command runs envsubst over this file). The browser never
+# receives the key.
 apiVersion: v1
 kind: ConfigMap
 metadata:
   name: padus-nginx
 data:
-  nginx.conf: |
+  nginx.conf.template: |
     server {
         listen 80;
         server_name _;
@@ -72,6 +82,24 @@ data:
         add_header Access-Control-Allow-Origin *;
         add_header Access-Control-Allow-Methods "GET, POST, OPTIONS";
         add_header Access-Control-Allow-Headers "DNT,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,Range,Accept";
+
+        # ── Reverse proxy to open-llm-proxy ──────────────────────────
+        # Clients POST to /api/llm/chat/completions with a dummy bearer
+        # token; nginx rewrites the Authorization header using the
+        # ${PROXY_KEY} substituted in at container startup.
+        location /api/llm/ {
+            proxy_pass https://open-llm-proxy.nrp-nautilus.io/v1/;
+            proxy_set_header Authorization "Bearer ${PROXY_KEY}";
+            proxy_set_header Host open-llm-proxy.nrp-nautilus.io;
+            proxy_ssl_server_name on;
+
+            # Allow long agent loops (multi-turn tool use)
+            proxy_read_timeout 300s;
+            proxy_send_timeout 300s;
+
+            # Don't buffer streaming responses
+            proxy_buffering off;
+        }
 
         location / {
             try_files $uri $uri/ /index.html;
