@@ -177,6 +177,7 @@
                     "group": "Population",
                     "colormap": "magma",
                     "rescale": "0,200",
+                    "nodata": 0,
                     "legend_label": "people per 90m cell"
                 }
             ]
