@@ -154,6 +154,32 @@
                     "legend_type": "categorical"
                 }
             ]
+        },
+        {
+            "collection_id": "cgls-lc100-2019",
+            "collection_url": "https://s3-west.nrp-nautilus.io/public-land-cover/cgls-lc100-2019/stac-collection.json",
+            "assets": [
+                {
+                    "id": "cgls-lc100-2019-cog",
+                    "display_name": "Global Land Cover (CGLS-LC100, 2019)",
+                    "group": "Land Cover",
+                    "legend_type": "categorical"
+                }
+            ]
+        },
+        {
+            "collection_id": "ghs-pop-2020",
+            "collection_url": "https://s3-west.nrp-nautilus.io/public-high-seas/ghs-pop-2020/stac-collection.json",
+            "assets": [
+                {
+                    "id": "ghs-pop-2020-cog",
+                    "display_name": "Global Population Density (GHS-POP 2020)",
+                    "group": "Population",
+                    "colormap": "magma",
+                    "rescale": "0,200",
+                    "legend_label": "people per 90m cell"
+                }
+            ]
         }
     ]
 }

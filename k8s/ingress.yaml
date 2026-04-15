@@ -2,6 +2,7 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: padus-ingress
+  namespace: biodiversity
   annotations:
     haproxy-ingress.github.io/cors-enable: "true"
     haproxy-ingress.github.io/cors-allow-origin: "*"

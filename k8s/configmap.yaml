@@ -10,6 +10,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: padus-config
+  namespace: biodiversity
 data:
   config.template.json: |
     {
@@ -70,6 +71,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: padus-nginx
+  namespace: biodiversity
 data:
   nginx.conf.template: |
     server {
