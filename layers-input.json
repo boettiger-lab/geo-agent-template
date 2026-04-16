@@ -1,7 +1,7 @@
 {
     "catalog": "https://s3-west.nrp-nautilus.io/public-data/stac/catalog.json",
     "titiler_url": "https://titiler.nrp-nautilus.io",
-    "mcp_url": "https://duckdb-mcp.nrp-nautilus.io/mcp",
+    "mcp_url": "https://dev-duckdb-mcp.nrp-nautilus.io/mcp",
     "view": {
         "center": [
             -98,
