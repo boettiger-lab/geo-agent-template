@@ -40,7 +40,7 @@
         "examples": [
             "Tell me about the datasets you have access to.",
             "Show only GAP Status 1 lands on the map.",
-            "Which states have the most PAD-US fee-protected land (in acres)?",
+            "How many acres of GAP 1 land in California?",
             "Color the fee lands by management type."
         ]
     },
