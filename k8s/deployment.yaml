@@ -46,7 +46,7 @@ spec:
         - name: TMPDIR
           value: "/tmp"
         - name: MCP_SERVER_URL
-          value: "https://duckdb-mcp.nrp-nautilus.io/mcp"
+          value: "https://dev-duckdb-mcp.nrp-nautilus.io/mcp"
         - name: LLM_ENDPOINT
           value: "https://open-llm-proxy.nrp-nautilus.io/v1"
         - name: PROXY_KEY
