@@ -38,10 +38,10 @@
     "welcome": {
         "message": "Hi! I can help you explore protected areas and carbon data. Try asking:",
         "examples": [
-            "Tell me about the datasets you have access to.",
-            "Show only GAP Status 1 lands on the map.",
-            "How many acres of GAP 1 land in California?",
-            "Color the fee lands by management type."
+            "How many acres of GAP Status 1 land does California have?",
+            "What's the average irrecoverable carbon in California's GAP 1+2 protected lands?",
+            "Find the top 5 states by conservation easement acreage.",
+            "Color the fee lands by management type and tell me the top 3 management agencies by acreage."
         ]
     },
     "collections": [
