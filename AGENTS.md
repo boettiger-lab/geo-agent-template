@@ -43,6 +43,19 @@ Instead, add a "Discovering data" section directing the agent to call `list_data
 
 ---
 
+## Branch and deployment workflow
+
+**`main` is the live branch.** The `padus` deployment on k8s clones from `main` at pod startup — whatever is on `main` is what runs in production.
+
+Workflow for testing CDN pin updates or config changes:
+1. Create a `test/` branch, make changes, verify jsDelivr serves the new SHA.
+2. Merge the `test/` branch to `main` (fast-forward is fine).
+3. Restart the deployment: `kubectl rollout restart deployment/padus -n biodiversity`
+
+Do **not** merge to main before verifying the CDN SHA is live — jsDelivr can take up to an hour to index a new tag.
+
+---
+
 ## Deployment
 
 Full guide: [boettiger-lab.github.io/geo-agent/docs/guide/deployment](https://boettiger-lab.github.io/geo-agent/docs/guide/deployment)
