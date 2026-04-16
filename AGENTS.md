@@ -98,22 +98,24 @@ For private data modules (rclone sidecar, oauth2-proxy, private parquet credenti
 
 ### CDN versioning
 
-`index.html` pins the geo-agent library version:
+`index.html` tracks `@main` by default:
 
 ```html
-<!-- Pinned — immutable, recommended for production -->
-<script type="module" src="https://cdn.jsdelivr.net/gh/boettiger-lab/geo-agent@v3.0.2/app/main.js"></script>
-
-<!-- Latest main — staging/development only -->
 <script type="module" src="https://cdn.jsdelivr.net/gh/boettiger-lab/geo-agent@main/app/main.js"></script>
 ```
 
-To upgrade: change the tag in `index.html` and redeploy. **Verify jsDelivr serves the new tag before deploying** — new tags can take up to an hour to be indexed:
+**When testing a geo-agent PR:** pin to the PR's HEAD commit hash, verify jsDelivr serves it, then return to `@main` when done:
 
 ```bash
-curl -sI https://cdn.jsdelivr.net/gh/boettiger-lab/geo-agent@vX.Y.Z/app/style.css | grep HTTP
-# Must return HTTP/2 200 — a 404 means jsDelivr hasn't indexed the tag yet
+# Get latest SHA from a PR
+gh pr view 166 --repo boettiger-lab/geo-agent --json headRefOid --jq '.headRefOid[:8]'
+
+# Verify jsDelivr serves it before deploying
+curl -sI https://cdn.jsdelivr.net/gh/boettiger-lab/geo-agent@<sha>/app/style.css | grep HTTP
+# Must return HTTP/2 200
 ```
+
+Replace all three occurrences of the SHA in `index.html` (style.css, chat.css, sidebar.css, main.js), commit to `main`, and restart.
 
 ---
 
