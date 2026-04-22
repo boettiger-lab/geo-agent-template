@@ -16,6 +16,11 @@ data:
     {
         "mcp_server_url": "${MCP_SERVER_URL}",
         "llm_model": "minimax-m2",
+        "transcription_model": {
+            "value": "gemma",
+            "endpoint": "/api/llm",
+            "api_key": "unused"
+        },
         "llm_models": [
             {
                 "value": "gemma",
