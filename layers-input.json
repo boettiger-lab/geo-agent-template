@@ -11,6 +11,7 @@
     },
     "llm": {
         "user_provided": true,
+        "transcription_model": { "value": "gemma" },
         "default_endpoint": "https://openrouter.ai/api/v1",
         "models": [
             {
