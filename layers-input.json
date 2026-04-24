@@ -150,8 +150,8 @@
             ]
         },
         {
-            "collection_id": "wetlands-global-unified",
-            "collection_url": "https://s3-west.nrp-nautilus.io/public-wetlands/stac-collection.json",
+            "collection_id": "wetlands-glwd-v2",
+            "collection_url": "https://s3-west.nrp-nautilus.io/public-wetlands/glwd/stac-collection.json",
             "assets": [
                 {
                     "id": "glwd-main-class-cog",
