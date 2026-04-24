@@ -45,6 +45,11 @@
             "Color the fee lands by management type and tell me the top 3 management agencies by acreage."
         ]
     },
+    "links": {
+        "github": "https://github.com/boettiger-lab/geo-agent-template",
+        "docs": "https://boettiger-lab.github.io/geo-agent/",
+        "carbon": true
+    },
     "collections": [
         {
             "collection_id": "pad-us-4.1-fee",

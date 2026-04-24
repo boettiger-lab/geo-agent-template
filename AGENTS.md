@@ -9,7 +9,7 @@ This is a **template repo** for creating geo-agent map applications. The core li
 | `geo-agent` | Core library (map, chat, agent, tools). Source of truth for all functionality. |
 | `geo-agent-template` | Starter template. Users fork this and configure three files for their dataset. |
 
-**Full docs:** [boettiger-lab.github.io/geo-agent/docs](https://boettiger-lab.github.io/geo-agent/docs/)
+**Full docs:** [boettiger-lab.github.io/geo-agent](https://boettiger-lab.github.io/geo-agent/)
 — includes the complete configuration reference, deployment guide, and agent loop internals.
 
 The schema below is kept inline so you can work without a network fetch. If it conflicts with the docs, the docs are authoritative.
