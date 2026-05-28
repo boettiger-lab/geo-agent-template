@@ -141,6 +141,37 @@
             ]
         },
         {
+            "collection_id": "federal-trails-2026",
+            "collection_url": "https://s3-west.nrp-nautilus.io/public-trails/federal-trails-2026/stac-collection.json",
+            "assets": [
+                {
+                    "id": "federal-trails-2026-pmtiles",
+                    "display_name": "Federal Trails (USFS / NPS / BLM)",
+                    "group": "Trails",
+                    "visible": true,
+                    "layer_type": "line",
+                    "default_style": {
+                        "line-color": [
+                            "match",
+                            ["get", "admin_agency"],
+                            "USFS", "#2E7D32",
+                            "NPS",  "#5D4037",
+                            "BLM",  "#E65100",
+                            "#888888"
+                        ],
+                        "line-width": 1.2,
+                        "line-opacity": 0.9
+                    },
+                    "tooltip_fields": [
+                        "trail_name",
+                        "admin_agency",
+                        "admin_unit",
+                        "length_miles"
+                    ]
+                }
+            ]
+        },
+        {
             "collection_id": "irrecoverable-carbon",
             "assets": [
                 {
