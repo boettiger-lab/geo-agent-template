@@ -4,7 +4,8 @@
     "mcp_url": "https://dev-duckdb-mcp.nrp-nautilus.io/mcp",
     "auto_approve": true,
     "sidebar": {
-        "enabled": true
+        "enabled": true,
+        "chat_title": "Chatbot"
     },
     "view": {
         "center": [
