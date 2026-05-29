@@ -5,7 +5,7 @@
     "auto_approve": true,
     "sidebar": {
         "enabled": true,
-        "chat_title": "Chatbot"
+        "chat_title": "Chat"
     },
     "view": {
         "center": [
