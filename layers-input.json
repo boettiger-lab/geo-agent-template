@@ -174,6 +174,7 @@
         },
         {
             "collection_id": "irrecoverable-carbon",
+            "collection_url": "https://s3-west.nrp-nautilus.io/public-carbon/stac-collection.json",
             "assets": [
                 {
                     "id": "v2-irrecoverable-2024-cog",
@@ -211,7 +212,7 @@
         },
         {
             "collection_id": "ghs-pop-2020",
-            "collection_url": "https://s3-west.nrp-nautilus.io/public-high-seas/ghs-pop-2020/stac-collection.json",
+            "collection_url": "https://s3-west.nrp-nautilus.io/public-population/ghs-pop-2020/stac-collection.json",
             "assets": [
                 {
                     "id": "ghs-pop-2020-cog",
