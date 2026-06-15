@@ -105,6 +105,11 @@
                         "Unit_Nm",
                         "GAP_Sts",
                         "Mang_Type"
+                    ],
+                    "legend_type": "categorical",
+                    "legend_classes": [
+                        { "label": "GAP Status 1 — managed for biodiversity", "color": "#26633A" },
+                        { "label": "GAP Status 2 — managed, some extractive use", "color": "#3E9C47" }
                     ]
                 }
             ]
@@ -172,6 +177,12 @@
                         "admin_agency",
                         "admin_unit",
                         "length_miles"
+                    ],
+                    "legend_type": "categorical",
+                    "legend_classes": [
+                        { "label": "USFS", "color": "#2E7D32" },
+                        { "label": "NPS", "color": "#5D4037" },
+                        { "label": "BLM", "color": "#E65100" }
                     ]
                 }
             ]
