@@ -164,7 +164,7 @@
                         "line-color": [
                             "match",
                             ["get", "admin_agency"],
-                            "USFS", "#2E7D32",
+                            "USFS", "#1565C0",
                             "NPS",  "#5D4037",
                             "BLM",  "#E65100",
                             "#888888"
@@ -180,7 +180,7 @@
                     ],
                     "legend_type": "categorical",
                     "legend_classes": [
-                        { "label": "USFS", "color": "#2E7D32" },
+                        { "label": "USFS", "color": "#1565C0" },
                         { "label": "NPS", "color": "#5D4037" },
                         { "label": "BLM", "color": "#E65100" }
                     ]
