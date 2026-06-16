@@ -7,7 +7,10 @@
         "provider": "nominatim",
         "search_box": true
     },
-    "geolocate": true,
+    "geolocate": {
+        "button": true,
+        "agent_tool": true
+    },
     "sidebar": {
         "enabled": true,
         "chat_title": "Chat"
