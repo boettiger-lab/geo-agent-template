@@ -245,6 +245,50 @@
             ]
         },
         {
+            "collection_id": "svi-2022",
+            "collection_url": "https://s3-west.nrp-nautilus.io/public-social-vulnerability/2022/stac-collection.json",
+            "assets": [
+                {
+                    "id": "county-pmtiles",
+                    "display_name": "Social Vulnerability (SVI 2022, county)",
+                    "group": "Social Vulnerability",
+                    "visible": true,
+                    "default_style": {
+                        "fill-color": [
+                            "interpolate", ["linear"], ["get", "RPL_THEMES"],
+                            0,   "#ffffcc",
+                            0.5, "#fd8d3c",
+                            1,   "#bd0026"
+                        ],
+                        "fill-opacity": 0.7
+                    },
+                    "default_filter": [">=", ["get", "RPL_THEMES"], 0],
+                    "tooltip_fields": ["COUNTY", "ST_ABBR", "RPL_THEMES"],
+                    "legend_type": "continuous",
+                    "legend_label": "SVI percentile"
+                },
+                {
+                    "id": "tract-pmtiles",
+                    "display_name": "Social Vulnerability (SVI 2022, tract)",
+                    "group": "Social Vulnerability",
+                    "visible": false,
+                    "default_style": {
+                        "fill-color": [
+                            "interpolate", ["linear"], ["get", "RPL_THEMES"],
+                            0,   "#ffffcc",
+                            0.5, "#fd8d3c",
+                            1,   "#bd0026"
+                        ],
+                        "fill-opacity": 0.75
+                    },
+                    "default_filter": [">=", ["get", "RPL_THEMES"], 0],
+                    "tooltip_fields": ["COUNTY", "ST_ABBR", "RPL_THEMES"],
+                    "legend_type": "continuous",
+                    "legend_label": "SVI percentile"
+                }
+            ]
+        },
+        {
             "collection_id": "gbif-derived",
             "collection_url": "https://s3-west.nrp-nautilus.io/public-gbif/stac-collection.json",
             "assets": []
