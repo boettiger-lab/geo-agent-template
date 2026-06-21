@@ -252,7 +252,7 @@
                     "id": "county-pmtiles",
                     "display_name": "Social Vulnerability (SVI 2022, county)",
                     "group": "Social Vulnerability",
-                    "visible": true,
+                    "visible": false,
                     "default_style": {
                         "fill-color": [
                             "interpolate", ["linear"], ["get", "RPL_THEMES"],
