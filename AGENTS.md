@@ -45,12 +45,14 @@ Instead, add a "Discovering data" section directing the agent to call `list_data
 
 ## Branch and deployment workflow
 
-**`main` is the live branch.** The `padus` deployment on k8s clones from `main` at pod startup — whatever is on `main` is what runs in production.
+**`main` is the live branch.** The k8s Deployment defined in `k8s/deployment.yaml` clones from `main` at pod startup — whatever is on `main` is what runs in production.
+
+> ⚠️ **Read the Deployment name and namespace from `k8s/deployment.yaml` — never copy them from an example in this doc.** Every fork has its own name (the manifest's `metadata.name` / `metadata.namespace`). The commands below reference the manifest file directly (`-f k8s/deployment.yaml`) so you physically cannot restart the wrong app. If you must use `deployment/<name>` form, get `<name>` from the manifest first: `kubectl get -f k8s/deployment.yaml`.
 
 Workflow for testing CDN pin updates or config changes:
 1. Create a `test/` branch, make changes, verify jsDelivr serves the new SHA.
 2. Merge the `test/` branch to `main` (fast-forward is fine).
-3. Restart the deployment: `kubectl rollout restart deployment/padus -n biodiversity`
+3. Restart the deployment: `kubectl rollout restart -f k8s/deployment.yaml` (reads name + namespace from the manifest).
 
 Do **not** merge to main before verifying the CDN SHA is live — jsDelivr can take up to an hour to index a new tag.
 
@@ -70,8 +72,9 @@ The pod's init container clones the GitHub repo at startup. **Push to GitHub fir
 
 ```bash
 git add <files> && git commit -m "<message>" && git push
-kubectl rollout restart deployment/<app-name> -n <namespace>
-kubectl rollout status deployment/<app-name> -n <namespace>
+# name + namespace come from the manifest — do not hardcode them
+kubectl rollout restart -f k8s/deployment.yaml
+kubectl rollout status  -f k8s/deployment.yaml
 ```
 
 Restarting without pushing first serves stale code.
@@ -85,9 +88,9 @@ When the GitHub repo is private, the pod reads content from a k8s ConfigMap inst
 # 2. Regenerate the ConfigMap
 bash scripts/generate-configmap.sh
 # 3. Apply and restart
-kubectl apply -f k8s/content-configmap.yaml -n <namespace>
-kubectl rollout restart deployment/<app-name> -n <namespace>
-kubectl rollout status deployment/<app-name> -n <namespace>
+kubectl apply -f k8s/content-configmap.yaml
+kubectl rollout restart -f k8s/deployment.yaml
+kubectl rollout status  -f k8s/deployment.yaml
 # 4. Commit and push source files (not just the generated configmap)
 git add <source-files> k8s/content-configmap.yaml && git commit -m "<message>" && git push
 ```
