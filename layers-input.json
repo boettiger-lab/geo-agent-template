@@ -837,6 +837,72 @@
                     "tooltip_fields": ["NAMELSAD", "GEOID", "COUNTYFP"]
                 }
             ]
+        },
+        {
+            "collection_id": "census-2024-cd",
+            "collection_url": "https://s3-west.nrp-nautilus.io/public-census/census-2024/cd/stac-collection.json",
+            "group": { "name": "Administrative Boundaries", "collapsed": true },
+            "assets": [
+                {
+                    "id": "cd-pmtiles",
+                    "display_name": "Congressional Districts (119th)",
+                    "visible": false,
+                    "default_style": {
+                        "fill-color": "#00796B",
+                        "fill-opacity": 0.03
+                    },
+                    "outline_style": {
+                        "line-color": "#00796B",
+                        "line-width": 0.8,
+                        "line-opacity": 0.7
+                    },
+                    "tooltip_fields": ["NAMELSAD", "STATEFP", "GEOID"]
+                }
+            ]
+        },
+        {
+            "collection_id": "census-2025-sldu",
+            "collection_url": "https://s3-west.nrp-nautilus.io/public-census/census-2025/sldu/stac-collection.json",
+            "group": { "name": "Administrative Boundaries", "collapsed": true },
+            "assets": [
+                {
+                    "id": "sldu-pmtiles",
+                    "display_name": "State Legislative — Upper (Senate)",
+                    "visible": false,
+                    "default_style": {
+                        "fill-color": "#00897B",
+                        "fill-opacity": 0.03
+                    },
+                    "outline_style": {
+                        "line-color": "#00897B",
+                        "line-width": 0.5,
+                        "line-opacity": 0.6
+                    },
+                    "tooltip_fields": ["NAMELSAD", "STATEFP", "GEOID"]
+                }
+            ]
+        },
+        {
+            "collection_id": "census-2025-sldl",
+            "collection_url": "https://s3-west.nrp-nautilus.io/public-census/census-2025/sldl/stac-collection.json",
+            "group": { "name": "Administrative Boundaries", "collapsed": true },
+            "assets": [
+                {
+                    "id": "sldl-pmtiles",
+                    "display_name": "State Legislative — Lower (House)",
+                    "visible": false,
+                    "default_style": {
+                        "fill-color": "#26A69A",
+                        "fill-opacity": 0.03
+                    },
+                    "outline_style": {
+                        "line-color": "#26A69A",
+                        "line-width": 0.35,
+                        "line-opacity": 0.55
+                    },
+                    "tooltip_fields": ["NAMELSAD", "STATEFP", "GEOID"]
+                }
+            ]
         }
     ]
 }
