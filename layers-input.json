@@ -127,72 +127,6 @@
             ]
         },
         {
-            "collection_id": "pad-us-4.1-proclamation",
-            "collection_url": "https://s3-west.nrp-nautilus.io/public-padus/padus-4-1/proclamation/stac-collection.json",
-            "assets": [
-                {
-                    "id": "proclamation-pmtiles",
-                    "display_name": "Proclamation Boundaries",
-                    "group": "Protected Areas",
-                    "visible": false,
-                    "default_style": {
-                        "fill-color": "#5D4037",
-                        "fill-opacity": 0
-                    },
-                    "outline_style": {
-                        "line-color": "#5D4037",
-                        "line-width": 1.0,
-                        "line-opacity": 0.7
-                    },
-                    "tooltip_fields": ["Unit_Nm", "Mang_Name", "State_Nm", "GIS_Acres"]
-                }
-            ]
-        },
-        {
-            "collection_id": "landvote",
-            "collection_url": "https://s3-west.nrp-nautilus.io/public-tpl/landvote/stac-collection.json",
-            "assets": [
-                {
-                    "id": "landvote-pmtiles",
-                    "display_name": "Conservation Ballot Measures (LandVote)",
-                    "group": "Protected Areas",
-                    "visible": false,
-                    "default_style": {
-                        "fill-color": "#00695C",
-                        "fill-opacity": 0.4
-                    },
-                    "outline_style": {
-                        "line-color": "#004D40",
-                        "line-width": 0.6,
-                        "line-opacity": 0.7
-                    },
-                    "tooltip_fields": ["municipal", "status", "purpose", "conservation_funds_approved"]
-                }
-            ]
-        },
-        {
-            "collection_id": "conservation-almanac-2024-sites",
-            "collection_url": "https://s3-west.nrp-nautilus.io/public-tpl/conservation-almanac-2024-sites/stac-collection.json",
-            "assets": [
-                {
-                    "id": "conservation-almanac-2024-sites-pmtiles",
-                    "display_name": "Conservation Almanac Sites (TPL)",
-                    "group": "Protected Areas",
-                    "visible": false,
-                    "default_style": {
-                        "fill-color": "#2E7D32",
-                        "fill-opacity": 0.5
-                    },
-                    "outline_style": {
-                        "line-color": "#1B5E20",
-                        "line-width": 0.4,
-                        "line-opacity": 0.6
-                    },
-                    "tooltip_fields": ["site", "county", "acres", "owner"]
-                }
-            ]
-        },
-        {
             "collection_id": "usfws-critical-habitat-final",
             "collection_url": "https://s3-west.nrp-nautilus.io/public-usfws/critical-habitat/final/stac-collection.json",
             "assets": [
@@ -207,6 +141,28 @@
                     },
                     "outline_style": {
                         "line-color": "#880E4F",
+                        "line-width": 0.5,
+                        "line-opacity": 0.7
+                    },
+                    "tooltip_fields": ["comname", "sciname", "unitname", "status"]
+                }
+            ]
+        },
+        {
+            "collection_id": "usfws-critical-habitat-proposed",
+            "collection_url": "https://s3-west.nrp-nautilus.io/public-usfws/critical-habitat/proposed/stac-collection.json",
+            "assets": [
+                {
+                    "id": "proposed-pmtiles",
+                    "display_name": "Critical Habitat — Proposed (USFWS)",
+                    "group": "Protected Areas",
+                    "visible": false,
+                    "default_style": {
+                        "fill-color": "#F9A825",
+                        "fill-opacity": 0.35
+                    },
+                    "outline_style": {
+                        "line-color": "#F57F17",
                         "line-width": 0.5,
                         "line-opacity": 0.7
                     },
@@ -257,16 +213,43 @@
                     "colormap": "reds",
                     "rescale": "0,150",
                     "legend_label": "Mg C / ha"
+                },
+                {
+                    "id": "v2-irrecoverable-2018-cog",
+                    "display_name": "Irrecoverable Carbon (2018)",
+                    "group": "Carbon",
+                    "visible": false,
+                    "colormap": "reds",
+                    "rescale": "0,150",
+                    "legend_label": "Mg C / ha"
+                },
+                {
+                    "id": "v2-vulnerable-2024-cog",
+                    "display_name": "Vulnerable Carbon (2024)",
+                    "group": "Carbon",
+                    "visible": false,
+                    "colormap": "oranges",
+                    "rescale": "0,300",
+                    "legend_label": "Mg C / ha"
+                },
+                {
+                    "id": "v2-manageable-2024-cog",
+                    "display_name": "Manageable Carbon (2024)",
+                    "group": "Carbon",
+                    "visible": false,
+                    "colormap": "greens",
+                    "rescale": "0,500",
+                    "legend_label": "Mg C / ha"
                 }
             ]
         },
         {
-            "collection_id": "nlcd-2024",
-            "collection_url": "https://s3-west.nrp-nautilus.io/public-land-cover/nlcd-2024/stac-collection.json",
+            "collection_id": "cgls-lc100-2019",
+            "collection_url": "https://s3-west.nrp-nautilus.io/public-land-cover/cgls-lc100-2019/stac-collection.json",
             "assets": [
                 {
-                    "id": "nlcd-2024-cog",
-                    "display_name": "Land Cover (NLCD 2024, CONUS)",
+                    "id": "cgls-lc100-2019-cog",
+                    "display_name": "Land Cover (Copernicus CGLS-LC100, 2019)",
                     "group": "Land Cover",
                     "legend_type": "categorical"
                 }
