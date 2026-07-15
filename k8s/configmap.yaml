@@ -104,9 +104,14 @@ data:
             proxy_set_header Host open-llm-proxy.nrp-nautilus.io;
             proxy_ssl_server_name on;
 
-            # Allow long agent loops (multi-turn tool use)
-            proxy_read_timeout 300s;
-            proxy_send_timeout 300s;
+            # Allow long agent loops (multi-turn tool use). 600s keeps the
+            # timeout uniform across the whole chain: the geo-agent client
+            # defaults to 600s (app/agent.js _llmTimeoutMs) and open-llm-proxy's
+            # httpx timeout is 600s, so this sidecar was the odd hop at 300s —
+            # cutting off slow-decode models (e.g. glm-5.2) the rest of the
+            # chain would still wait for.
+            proxy_read_timeout 600s;
+            proxy_send_timeout 600s;
 
             # Don't buffer streaming responses
             proxy_buffering off;
