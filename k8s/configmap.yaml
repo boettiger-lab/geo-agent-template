@@ -106,11 +106,12 @@ data:
         # unreachable) → nginx marks the upstream down → intermittent 502s in
         # the browser (geo-agent-ops#64, open-llm-proxy#71). A runtime resolver
         # with ipv6=off + a variabled proxy_pass forces resolution back onto
-        # IPv4 on every request. `local=on` reads the pod's CoreDNS from
-        # /etc/resolv.conf (nginx ≥1.27), so there's no resolver IP to hardcode.
+        # IPv4 on every request. 10.96.0.10 is the in-cluster CoreDNS ClusterIP
+        # (kube-dns); the nginx:alpine build here rejects `local=on` (it parses
+        # it as a nameserver host and crashloops — validated against nginx 1.31.2).
         # Remove once open-llm-proxy#71 lands the service-side AAAA fix.
         location ~ ^/api/llm/(.*)$ {
-            resolver local=on ipv6=off valid=30s;
+            resolver 10.96.0.10 ipv6=off valid=30s;
             set $llm_upstream "open-llm-proxy.nrp-nautilus.io";
             # A variabled proxy_pass drops nginx's implicit URI rewrite, so
             # reconstruct the /v1/ path (and any query string) from the regex
