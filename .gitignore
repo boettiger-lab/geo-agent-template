@@ -1,1 +1,5 @@
 .claude/
+
+# Editor / notebook artifacts
+.ipynb_checkpoints/
+.vscode/
