@@ -51,6 +51,12 @@ data:
                 "api_key": "unused"
             },
             {
+                "value": "google/gemini-3.5-flash-lite",
+                "label": "Gemini 3.5 Flash Lite (OpenRouter)",
+                "endpoint": "/api/llm",
+                "api_key": "unused"
+            },
+            {
                 "value": "qwen3",
                 "label": "NRP Qwen3",
                 "endpoint": "/api/llm",
