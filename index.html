@@ -7,9 +7,10 @@
     <title>CA Protected Lands</title>
 
     <!--
-        Geo-Chat core modules loaded from CDN, pinned to a release tag.
-        Bump the @vX.Y.Z pin deliberately (4 places below); never use @main
-        in a deployed app. Third-party libraries carry Subresource Integrity
+        Geo-Chat core modules loaded from CDN. TEMPORARILY pinned to the PR #327
+        HEAD commit (bbcd8530) to live-test opt-in GeoJSON upload (geo-agent#325).
+        Return to a release tag (@vX.Y.Z, 4 places below) once #327 merges; never
+        use @main in a deployed app. Third-party libraries carry Subresource Integrity
         (integrity=) hashes — copy this file verbatim and do NOT hand-edit a
         hash; a mismatched hash blocks the script. Hashes only change when a
         library version is bumped. See the geo-agent quickstart docs.
@@ -64,9 +65,9 @@
         crossorigin="anonymous"></script>
 
     <!-- Core styles from CDN -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/boettiger-lab/geo-agent@v3.23.0/app/style.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/boettiger-lab/geo-agent@v3.23.0/app/chat.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/boettiger-lab/geo-agent@v3.23.0/app/sidebar.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/boettiger-lab/geo-agent@bbcd8530/app/style.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/boettiger-lab/geo-agent@bbcd8530/app/chat.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/boettiger-lab/geo-agent@bbcd8530/app/sidebar.css">
 </head>
 
 <body>
@@ -77,7 +78,7 @@
     <div id="menu"></div>
 
     <!-- Boot from CDN -->
-    <script type="module" src="https://cdn.jsdelivr.net/gh/boettiger-lab/geo-agent@v3.23.0/app/main.js"></script>
+    <script type="module" src="https://cdn.jsdelivr.net/gh/boettiger-lab/geo-agent@bbcd8530/app/main.js"></script>
 </body>
 
 </html>

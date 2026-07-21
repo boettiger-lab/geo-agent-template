@@ -3,6 +3,7 @@
     "titiler_url": "https://titiler.nrp-nautilus.io",
     "mcp_url": "https://dev-duckdb-mcp.nrp-nautilus.io/mcp",
     "auto_approve": true,
+    "upload_enabled": true,
     "charts": {
         "enabled": true
     },
