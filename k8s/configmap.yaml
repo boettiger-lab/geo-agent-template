@@ -115,30 +115,27 @@ data:
         # ── Reverse proxy to open-llm-proxy ──────────────────────────
         # Clients POST to /api/llm/chat/completions with a dummy bearer
         # token; nginx rewrites the Authorization header using the
-        # ${PROXY_KEY} substituted in at container startup.
+        # ${PROXY_KEY} substituted in at container startup. The browser
+        # never receives the key.
         #
-        # IPv4-only (geo-agent-ops#64): open-llm-proxy.nrp-nautilus.io advertises
-        # a AAAA (IPv6) record, and NRP nodes are heterogeneous — some have working
-        # IPv6 egress, some don't. A literal-hostname proxy_pass resolves once at
-        # startup and can latch onto an IPv6 address a given pod's node can't reach,
-        # so connect() fails (101: Network unreachable) → nginx marks the upstream
-        # down → intermittent 502s in the browser. A runtime resolver with ipv6=off
-        # + a variabled proxy_pass forces resolution onto the IPv4 A-record on every
-        # request. 10.96.0.10 is the in-cluster CoreDNS ClusterIP (kube-dns); the
-        # nginx:alpine build here rejects `local=on` (it parses it as a nameserver
-        # host and crashloops — validated against nginx 1.31.2).
-        # This is the owned, permanent config — there is no server-side fix to wait
-        # for (the AAAA isn't broken, just unreachable from some nodes). Keep it.
-        location ~ ^/api/llm/(.*)$ {
-            resolver 10.96.0.10 ipv6=off valid=30s;
-            set $llm_upstream "open-llm-proxy.nrp-nautilus.io";
-            # A variabled proxy_pass drops nginx's implicit URI rewrite, so
-            # reconstruct the /v1/ path (and any query string) from the regex
-            # capture above.
-            proxy_pass https://$llm_upstream:443/v1/$1$is_args$args;
-            proxy_ssl_server_name on;
-            proxy_ssl_name open-llm-proxy.nrp-nautilus.io;
-            proxy_set_header Host open-llm-proxy.nrp-nautilus.io;
+        # In-cluster upstream (geo-agent-ops#73): proxy the open-llm-proxy
+        # ClusterIP service directly over HTTP inside the cluster, NOT its
+        # public hostname (open-llm-proxy.nrp-nautilus.io). Routing through the
+        # public ingress exposed the app to NRP's heterogeneous edge: nginx
+        # latched onto a single flapping anycast VIP and hard-failed ~12% of
+        # /api/llm connects (502/504 "while connecting to upstream") for a
+        # resolver window — invisible in the proxy logs because the request
+        # died here, at the app's nginx, before reaching the proxy. It also
+        # subsumes the earlier IPv6-unreachable failure the #64 IPv4-forcing
+        # block worked around: an in-cluster ClusterIP is IPv4 and single-VIP,
+        # so both failure modes disappear. The Origin header still forwards by
+        # default, so proxy logging/routing is unchanged.
+        #
+        # Cross-namespace apps (e.g. schmidtdse) use this same FQDN; the
+        # ClusterIP is reachable cluster-wide. The service lives only in the
+        # biodiversity namespace: ClusterIP open-llm-proxy:8002 (http).
+        location /api/llm/ {
+            proxy_pass http://open-llm-proxy.biodiversity.svc.cluster.local:8002/v1/;
             proxy_set_header Authorization "Bearer ${PROXY_KEY}";
 
             # Allow long agent loops (multi-turn tool use). 600s keeps the
