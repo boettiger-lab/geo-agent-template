@@ -7,9 +7,12 @@
     <title>CA Protected Lands</title>
 
     <!--
-        Geo-Chat core modules loaded from CDN. TEMPORARILY pinned to the PR #327
-        HEAD commit (1301513) to live-test opt-in GeoJSON upload (geo-agent#325).
-        Return to a release tag (@vX.Y.Z, 4 places below) once #327 merges; never
+        Geo-Chat core modules loaded from CDN. TEMPORARILY pinned to the PR #336
+        HEAD commit (87e9d1c7) to live-test legend refresh after set_style
+        (geo-agent#333). This SHA branches off geo-agent main, so it also carries
+        the merged upload feature (#327) and grouped legends (#328) that the
+        previous pin (1301513, PR #327 HEAD) was testing.
+        Return to a release tag (@vX.Y.Z, 4 places below) once #336 merges; never
         use @main in a deployed app. Third-party libraries carry Subresource Integrity
         (integrity=) hashes — copy this file verbatim and do NOT hand-edit a
         hash; a mismatched hash blocks the script. Hashes only change when a
@@ -65,9 +68,9 @@
         crossorigin="anonymous"></script>
 
     <!-- Core styles from CDN -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/boettiger-lab/geo-agent@1301513/app/style.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/boettiger-lab/geo-agent@1301513/app/chat.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/boettiger-lab/geo-agent@1301513/app/sidebar.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/boettiger-lab/geo-agent@87e9d1c7/app/style.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/boettiger-lab/geo-agent@87e9d1c7/app/chat.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/boettiger-lab/geo-agent@87e9d1c7/app/sidebar.css">
 </head>
 
 <body>
@@ -78,7 +81,7 @@
     <div id="menu"></div>
 
     <!-- Boot from CDN -->
-    <script type="module" src="https://cdn.jsdelivr.net/gh/boettiger-lab/geo-agent@1301513/app/main.js"></script>
+    <script type="module" src="https://cdn.jsdelivr.net/gh/boettiger-lab/geo-agent@87e9d1c7/app/main.js"></script>
 </body>
 
 </html>
