@@ -45,8 +45,8 @@ data:
                 "api_key": "unused"
             },
             {
-                "value": "deepseek/deepseek-v4-flash",
-                "label": "DeepSeek V4 Flash (OpenRouter)",
+                "value": "~deepseek/deepseek-v4-flash-latest",
+                "label": "DeepSeek V4 Flash Latest (OpenRouter)",
                 "endpoint": "/api/llm",
                 "api_key": "unused"
             },

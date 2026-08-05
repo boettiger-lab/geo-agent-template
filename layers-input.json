@@ -33,8 +33,8 @@
         "default_endpoint": "https://openrouter.ai/api/v1",
         "models": [
             {
-                "value": "deepseek/deepseek-v4-flash",
-                "label": "DeepSeek V4 Flash"
+                "value": "~deepseek/deepseek-v4-flash-latest",
+                "label": "DeepSeek V4 Flash Latest"
             },
             {
                 "value": "google/gemini-3.5-flash-lite",
