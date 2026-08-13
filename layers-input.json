@@ -1,5 +1,5 @@
 {
-    "catalog": "https://minio.carlboettiger.info/public-data/stac/catalog.json",
+    "catalog": "https://s3-west.nrp-nautilus.io/public-data/stac/catalog.json",
     "titiler_url": "https://titiler.nrp-nautilus.io",
     "mcp_url": "https://duckdb-mcp.carlboettiger.info/mcp",
     "auto_approve": true,
@@ -71,7 +71,7 @@
     "collections": [
         {
             "collection_id": "pad-us-4.1-fee",
-            "collection_url": "https://minio.carlboettiger.info/public-padus/padus-4-1/fee/stac-collection.json",
+            "collection_url": "https://s3-west.nrp-nautilus.io/public-padus/padus-4-1/fee/stac-collection.json",
             "assets": [
                 {
                     "id": "fee-pmtiles",
@@ -108,7 +108,7 @@
         },
         {
             "collection_id": "pad-us-4.1-easement",
-            "collection_url": "https://minio.carlboettiger.info/public-padus/padus-4-1/easement/stac-collection.json",
+            "collection_url": "https://s3-west.nrp-nautilus.io/public-padus/padus-4-1/easement/stac-collection.json",
             "assets": [
                 {
                     "id": "easement-pmtiles",
@@ -133,7 +133,7 @@
         },
         {
             "collection_id": "usfws-critical-habitat-final",
-            "collection_url": "https://minio.carlboettiger.info/public-usfws/critical-habitat/final/stac-collection.json",
+            "collection_url": "https://s3-west.nrp-nautilus.io/public-usfws/critical-habitat/final/stac-collection.json",
             "assets": [
                 {
                     "id": "final-pmtiles",
@@ -155,7 +155,7 @@
         },
         {
             "collection_id": "usfws-critical-habitat-proposed",
-            "collection_url": "https://minio.carlboettiger.info/public-usfws/critical-habitat/proposed/stac-collection.json",
+            "collection_url": "https://s3-west.nrp-nautilus.io/public-usfws/critical-habitat/proposed/stac-collection.json",
             "assets": [
                 {
                     "id": "proposed-pmtiles",
@@ -177,7 +177,7 @@
         },
         {
             "collection_id": "federal-trails-2026",
-            "collection_url": "https://minio.carlboettiger.info/public-trails/federal-trails-2026/stac-collection.json",
+            "collection_url": "https://s3-west.nrp-nautilus.io/public-trails/federal-trails-2026/stac-collection.json",
             "assets": [
                 {
                     "id": "federal-trails-2026-pmtiles",
@@ -209,7 +209,7 @@
         },
         {
             "collection_id": "irrecoverable-carbon",
-            "collection_url": "https://minio.carlboettiger.info/public-carbon/stac-collection.json",
+            "collection_url": "https://s3-west.nrp-nautilus.io/public-carbon/stac-collection.json",
             "assets": [
                 {
                     "id": "v2-irrecoverable-2024-cog",
@@ -240,11 +240,11 @@
             ]
         },
         {
-            "collection_id": "nlcd-2024",
-            "collection_url": "https://minio.carlboettiger.info/public-land-cover/nlcd-2024/stac-collection.json",
+            "collection_id": "nlcd",
+            "collection_url": "https://s3-west.nrp-nautilus.io/public-land-cover/nlcd/stac-collection.json",
             "assets": [
                 {
-                    "id": "nlcd-2024-cog",
+                    "id": "nlcd-cog-2024",
                     "display_name": "Land Cover (NLCD 2024)",
                     "group": "Land Cover",
                     "legend_type": "categorical"
@@ -253,7 +253,7 @@
         },
         {
             "collection_id": "rap-pfg-cover",
-            "collection_url": "https://minio.carlboettiger.info/public-rap/rap-pfg-cover/stac-collection.json",
+            "collection_url": "https://s3-west.nrp-nautilus.io/public-rap/rap-pfg-cover/stac-collection.json",
             "assets": [
                 {
                     "id": "rap-pfg-cover-cog",
@@ -267,7 +267,7 @@
         },
         {
             "collection_id": "wetlands-nwi",
-            "collection_url": "https://minio.carlboettiger.info/public-wetlands/nwi/stac-collection.json",
+            "collection_url": "https://s3-west.nrp-nautilus.io/public-wetlands/nwi/stac-collection.json",
             "assets": [
                 {
                     "id": "nwi-pmtiles",
@@ -305,7 +305,7 @@
         },
         {
             "collection_id": "usgs-wbd-hu8",
-            "collection_url": "https://minio.carlboettiger.info/public-usgs-wbd/wbd/hu8/stac-collection.json",
+            "collection_url": "https://s3-west.nrp-nautilus.io/public-usgs-wbd/wbd/hu8/stac-collection.json",
             "assets": [
                 {
                     "id": "hu8-pmtiles",
@@ -327,7 +327,7 @@
         },
         {
             "collection_id": "usgs-wbd-hu12",
-            "collection_url": "https://minio.carlboettiger.info/public-usgs-wbd/wbd/hu12/stac-collection.json",
+            "collection_url": "https://s3-west.nrp-nautilus.io/public-usgs-wbd/wbd/hu12/stac-collection.json",
             "assets": [
                 {
                     "id": "hu12-pmtiles",
@@ -349,7 +349,7 @@
         },
         {
             "collection_id": "epa-sab-v3-cws",
-            "collection_url": "https://minio.carlboettiger.info/public-epa-water/epa-sab-v3/cws/stac-collection.json",
+            "collection_url": "https://s3-west.nrp-nautilus.io/public-epa-water/epa-sab-v3/cws/stac-collection.json",
             "assets": [
                 {
                     "id": "sab-cws-pmtiles",
@@ -371,12 +371,12 @@
         },
         {
             "collection_id": "gbif-derived",
-            "collection_url": "https://minio.carlboettiger.info/public-gbif/stac-collection.json",
+            "collection_url": "https://s3-west.nrp-nautilus.io/public-gbif/stac-collection.json",
             "assets": []
         },
         {
             "collection_id": "mobi-species-richness-all",
-            "collection_url": "https://minio.carlboettiger.info/public-mobi/mobi-species-richness-all/stac-collection.json",
+            "collection_url": "https://s3-west.nrp-nautilus.io/public-mobi/mobi-species-richness-all/stac-collection.json",
             "assets": [
                 {
                     "id": "species-richness-all-cog",
@@ -390,7 +390,7 @@
         },
         {
             "collection_id": "iucn-richness-2025",
-            "collection_url": "https://minio.carlboettiger.info/public-iucn/stac-collection.json",
+            "collection_url": "https://s3-west.nrp-nautilus.io/public-iucn/stac-collection.json",
             "assets": [
                 {
                     "id": "combined-sr-cog",
@@ -404,12 +404,12 @@
         },
         {
             "collection_id": "iucn-ranges-2025",
-            "collection_url": "https://minio.carlboettiger.info/public-iucn/iucn-ranges-2025/stac-collection.json",
+            "collection_url": "https://s3-west.nrp-nautilus.io/public-iucn/iucn-ranges-2025/stac-collection.json",
             "assets": []
         },
         {
             "collection_id": "wwf-ecoregions-2017",
-            "collection_url": "https://minio.carlboettiger.info/public-ecoregion/stac-collection.json",
+            "collection_url": "https://s3-west.nrp-nautilus.io/public-ecoregion/stac-collection.json",
             "assets": [
                 {
                     "id": "ecoregion-pmtiles",
@@ -431,7 +431,7 @@
         },
         {
             "collection_id": "ghs-pop-2020",
-            "collection_url": "https://minio.carlboettiger.info/public-population/ghs-pop-2020/stac-collection.json",
+            "collection_url": "https://s3-west.nrp-nautilus.io/public-population/ghs-pop-2020/stac-collection.json",
             "assets": [
                 {
                     "id": "ghs-pop-2020-cog",
@@ -446,7 +446,7 @@
         },
         {
             "collection_id": "svi-2022",
-            "collection_url": "https://minio.carlboettiger.info/public-social-vulnerability/2022/stac-collection.json",
+            "collection_url": "https://s3-west.nrp-nautilus.io/public-social-vulnerability/2022/stac-collection.json",
             "assets": [
                 {
                     "id": "county-pmtiles",
@@ -490,7 +490,7 @@
         },
         {
             "collection_id": "mappinginequality",
-            "collection_url": "https://minio.carlboettiger.info/public-mappinginequality/stac-collection.json",
+            "collection_url": "https://s3-west.nrp-nautilus.io/public-mappinginequality/stac-collection.json",
             "assets": [
                 {
                     "id": "mappinginequality-pmtiles",
@@ -522,7 +522,7 @@
         },
         {
             "collection_id": "flood-hazard",
-            "collection_url": "https://minio.carlboettiger.info/public-hazard/flood-hazard/stac-collection.json",
+            "collection_url": "https://s3-west.nrp-nautilus.io/public-hazard/flood-hazard/stac-collection.json",
             "assets": [
                 {
                     "id": "flood-hazard-pmtiles",
@@ -557,7 +557,7 @@
         },
         {
             "collection_id": "sea-level-rise",
-            "collection_url": "https://minio.carlboettiger.info/public-hazard/sea-level-rise/stac-collection.json",
+            "collection_url": "https://s3-west.nrp-nautilus.io/public-hazard/sea-level-rise/stac-collection.json",
             "assets": [
                 {
                     "id": "sea-level-rise-pmtiles",
@@ -574,7 +574,7 @@
         },
         {
             "collection_id": "usgs-fires-2021-combined",
-            "collection_url": "https://minio.carlboettiger.info/public-fire/usgs-fires-2021/combined/stac-collection.json",
+            "collection_url": "https://s3-west.nrp-nautilus.io/public-fire/usgs-fires-2021/combined/stac-collection.json",
             "assets": [
                 {
                     "id": "combined-pmtiles",
@@ -596,7 +596,7 @@
         },
         {
             "collection_id": "landmark-iplc-poly",
-            "collection_url": "https://minio.carlboettiger.info/public-indigenous/landmark/iplc-poly-stac.json",
+            "collection_url": "https://s3-west.nrp-nautilus.io/public-indigenous/landmark/iplc-poly-stac.json",
             "assets": [
                 {
                     "id": "iplc-poly-pmtiles",
@@ -618,7 +618,7 @@
         },
         {
             "collection_id": "overture-divisions-countries-2026-02-18",
-            "collection_url": "https://minio.carlboettiger.info/public-overturemaps/2026-02-18.0/countries/stac-collection.json",
+            "collection_url": "https://s3-west.nrp-nautilus.io/public-overturemaps/2026-02-18.0/countries/stac-collection.json",
             "group": { "name": "Administrative Boundaries", "collapsed": true },
             "assets": [
                 {
@@ -639,7 +639,7 @@
         },
         {
             "collection_id": "census-2024-state",
-            "collection_url": "https://minio.carlboettiger.info/public-census/census-2024/state/stac-collection.json",
+            "collection_url": "https://s3-west.nrp-nautilus.io/public-census/census-2024/state/stac-collection.json",
             "group": { "name": "Administrative Boundaries", "collapsed": true },
             "assets": [
                 {
@@ -661,7 +661,7 @@
         },
         {
             "collection_id": "census-2024-county",
-            "collection_url": "https://minio.carlboettiger.info/public-census/census-2024/county/stac-collection.json",
+            "collection_url": "https://s3-west.nrp-nautilus.io/public-census/census-2024/county/stac-collection.json",
             "group": { "name": "Administrative Boundaries", "collapsed": true },
             "assets": [
                 {
@@ -683,7 +683,7 @@
         },
         {
             "collection_id": "census-2024-tract",
-            "collection_url": "https://minio.carlboettiger.info/public-census/census-2024/tract/stac-collection.json",
+            "collection_url": "https://s3-west.nrp-nautilus.io/public-census/census-2024/tract/stac-collection.json",
             "group": { "name": "Administrative Boundaries", "collapsed": true },
             "assets": [
                 {
@@ -705,7 +705,7 @@
         },
         {
             "collection_id": "census-2024-cd",
-            "collection_url": "https://minio.carlboettiger.info/public-census/census-2024/cd/stac-collection.json",
+            "collection_url": "https://s3-west.nrp-nautilus.io/public-census/census-2024/cd/stac-collection.json",
             "group": { "name": "Administrative Boundaries", "collapsed": true },
             "assets": [
                 {
@@ -727,7 +727,7 @@
         },
         {
             "collection_id": "census-2025-sldu",
-            "collection_url": "https://minio.carlboettiger.info/public-census/census-2025/sldu/stac-collection.json",
+            "collection_url": "https://s3-west.nrp-nautilus.io/public-census/census-2025/sldu/stac-collection.json",
             "group": { "name": "Administrative Boundaries", "collapsed": true },
             "assets": [
                 {
@@ -749,7 +749,7 @@
         },
         {
             "collection_id": "census-2025-sldl",
-            "collection_url": "https://minio.carlboettiger.info/public-census/census-2025/sldl/stac-collection.json",
+            "collection_url": "https://s3-west.nrp-nautilus.io/public-census/census-2025/sldl/stac-collection.json",
             "group": { "name": "Administrative Boundaries", "collapsed": true },
             "assets": [
                 {
