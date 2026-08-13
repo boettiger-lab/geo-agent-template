@@ -13,13 +13,19 @@ data:
   config.template.json: |
     {
         "mcp_server_url": "${MCP_SERVER_URL}",
-        "llm_model": "qwen",
+        "llm_model": "deepseek-v4-flash",
         "transcription_model": {
             "value": "gemma-4-e4b",
             "endpoint": "/api/llm",
             "api_key": "unused"
         },
         "llm_models": [
+            {
+                "value": "deepseek-v4-flash",
+                "label": "NRP DeepSeek V4 Flash",
+                "endpoint": "/api/llm",
+                "api_key": "unused"
+            },
             {
                 "value": "gemma",
                 "label": "NRP Gemma",
