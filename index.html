@@ -7,17 +7,14 @@
     <title>CA Protected Lands</title>
 
     <!--
-        Geo-Chat core modules loaded from CDN. TEMPORARILY pinned to the merged
-        commit 362fba32 (geo-agent#345) to test the vendored MCP SDK on a real
-        deployment before it goes into a release. That commit removes the
-        esm.sh dependency that was blanking the page on networks which block
-        that host (geo-agent#343).
-        Return to a release tag (@vX.Y.Z, 4 places below) once the next release
-        ships — see issue #35; never use @main in a deployed app. Third-party
-        libraries carry Subresource Integrity (integrity=) hashes — copy this
-        file verbatim and do NOT hand-edit a hash; a mismatched hash blocks the
-        script. Hashes only change when a library version is bumped. See the
-        geo-agent quickstart docs.
+        Geo-Chat core modules loaded from CDN, pinned to a release tag (@vX.Y.Z,
+        4 places below). Never use @main in a deployed app: a merge can change
+        behaviour under a running page. To upgrade, bump the tag in all four
+        places together.
+        Third-party libraries carry Subresource Integrity (integrity=) hashes —
+        copy this file verbatim and do NOT hand-edit a hash; a mismatched hash
+        blocks the script. Hashes only change when a library version is bumped.
+        See the geo-agent quickstart docs.
     -->
     <!-- MapLibre GL JS -->
     <script src="https://unpkg.com/maplibre-gl@5.22.0/dist/maplibre-gl.js"
@@ -60,9 +57,9 @@
         crossorigin="anonymous"></script>
 
     <!-- Core styles from CDN -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/boettiger-lab/geo-agent@362fba3270c17c2f9ba2efb72d59116dcaef8674/app/style.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/boettiger-lab/geo-agent@362fba3270c17c2f9ba2efb72d59116dcaef8674/app/chat.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/boettiger-lab/geo-agent@362fba3270c17c2f9ba2efb72d59116dcaef8674/app/sidebar.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/boettiger-lab/geo-agent@v3.26.0/app/style.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/boettiger-lab/geo-agent@v3.26.0/app/chat.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/boettiger-lab/geo-agent@v3.26.0/app/sidebar.css">
     <style>
         /* Boot placeholder — see #boot-status in the body. */
         #boot-status {
@@ -91,7 +88,7 @@
     <div id="menu"></div>
 
     <!-- Boot from CDN -->
-    <script type="module" src="https://cdn.jsdelivr.net/gh/boettiger-lab/geo-agent@362fba3270c17c2f9ba2efb72d59116dcaef8674/app/main.js"></script>
+    <script type="module" src="https://cdn.jsdelivr.net/gh/boettiger-lab/geo-agent@v3.26.0/app/main.js"></script>
 </body>
 
 </html>
