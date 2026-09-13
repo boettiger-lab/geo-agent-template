@@ -322,3 +322,48 @@ Do **not** use the legacy `["in", "ColumnName", "value1", "value2"]` form — it
 ```
 
 Omit the `llm` block entirely for Kubernetes deployments where `config.json` is injected server-side.
+
+---
+
+## Reporting bugs upstream
+
+A layer that fails in this app is usually **not** a bug in this repo. Route it:
+
+| Symptom | Repo |
+|---|---|
+| Config/schema mistake (`collection_id`, asset key, filter syntax) | here |
+| Map/chat/agent behaviour, missing renderer capability | `boettiger-lab/geo-agent` |
+| The published data or STAC is wrong (bad COG, truncated hex, bogus metadata) | `boettiger-lab/data-workflows` |
+
+A single investigation often produces issues in two of them — one for the data defect, one
+for the client's inability to cope with it. File both, and cross-reference.
+
+### Keep the issue body correct — don't correct it in a reply
+
+**When you learn that an issue's body is wrong, edit the body.** Do not append a
+correcting comment and leave the wrong statement standing above it. This applies to your
+own issues and to existing ones you discover are mistaken.
+
+Why: an issue is read as a *statement of what is true*, not as a transcript. Threads are
+read top-down and often only partly — a reader (human or model) who stops after the body,
+or who greps the repo for a dataset name, gets the uncorrected claim and acts on it. A
+correction buried in reply #7 does not reach them. Worse, a plan built on a wrong premise
+propagates: data-workflows#607 proposed rebuilding two collections "to match
+`rap-pfg-cover`", which turned out to be truncated itself (#666) — anyone following that
+plan would have rebuilt to a bad reference.
+
+Mechanics:
+
+```bash
+gh issue view <n> --repo <repo> --json body --jq .body > /tmp/orig.md
+# edit surgically — preserve everything still correct, in the author's voice
+gh issue edit <n> --repo <repo> --body-file /tmp/corrected.md
+```
+
+- **Surgical, not rewritten.** Change the wrong claims and what depends on them; leave
+  correct analysis, structure and voice alone. Diff before pushing.
+- **Leave a one-line edit footer** (`*Body corrected <date>: …*`) so the change is
+  auditable. That is enough — it does not need to be a narrative.
+- **Verify before asserting.** Measure the claim yourself rather than inheriting it from
+  another issue; #607's error was an unverified number repeated as fact.
+- Use a comment for genuinely new discussion, not for facts that belong in the body.
