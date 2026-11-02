@@ -1,4 +1,4 @@
-# AI Agent Guide — geo-agent-template
+# AI Agent Guide — glen-template
 
 ## Repo relationship
 
@@ -7,7 +7,7 @@ This is a **template repo** for creating geo-agent map applications. The core li
 | Repo | Purpose |
 |---|---|
 | `geo-agent` | Core library (map, chat, agent, tools). Source of truth for all functionality. |
-| `geo-agent-template` | Starter template. Users fork this and configure three files for their dataset. |
+| `glen-template` | Starter template. Users fork this and configure three files for their dataset. |
 
 **Full docs:** [schmidtdse.github.io/glen](https://schmidtdse.github.io/glen/)
 — includes the complete configuration reference, deployment guide, and agent loop internals.
