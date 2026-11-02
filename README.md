@@ -5,7 +5,7 @@ Users describe in plain language what datasets to show; the app uses an LLM agen
 
 **No JavaScript to write.** The core modules (map, chat, agent, tools) are loaded from CDN. You configure which data to show via three small files.
 
-**Full documentation:** [boettiger-lab.github.io/geo-agent/docs](https://boettiger-lab.github.io/geo-agent/docs/)
+**Full documentation:** [schmidtdse.github.io/glen/](https://schmidtdse.github.io/glen/)
 
 ## Repository structure
 
@@ -31,7 +31,7 @@ https://radiantearth.github.io/stac-browser/#/external/s3-west.nrp-nautilus.io/p
 ```
 
 Edit `layers-input.json` — set your collections and adjust the default map view.
-See the [configuration reference](https://boettiger-lab.github.io/geo-agent/docs/guide/configuration) for all fields.
+See the [configuration reference](https://schmidtdse.github.io/glen/guide/configuration) for all fields.
 
 ### 3. Edit `system-prompt.md`
 
@@ -97,7 +97,7 @@ kubectl rollout status deployment/my-app
 
 After pushing changes, redeploy: `kubectl rollout restart deployment/my-app`
 
-See the [deployment guide](https://boettiger-lab.github.io/geo-agent/docs/guide/deployment) for full details on all options including Hugging Face Spaces.
+See the [deployment guide](https://schmidtdse.github.io/glen/guide/deployment) for full details on all options including Hugging Face Spaces.
 
 ## Local development
 
@@ -108,6 +108,6 @@ python -m http.server 8000
 
 ## More resources
 
-- [Configuration reference](https://boettiger-lab.github.io/geo-agent/docs/guide/configuration) — all `layers-input.json` fields with examples
-- [Deployment guide](https://boettiger-lab.github.io/geo-agent/docs/guide/deployment) — GitHub Pages, Hugging Face Spaces, Kubernetes
-- [Core library](https://github.com/boettiger-lab/geo-agent) — source code for the map, chat, and agent modules
+- [Configuration reference](https://schmidtdse.github.io/glen/guide/configuration) — all `layers-input.json` fields with examples
+- [Deployment guide](https://schmidtdse.github.io/glen/guide/deployment) — GitHub Pages, Hugging Face Spaces, Kubernetes
+- [Core library](https://github.com/SchmidtDSE/glen) — source code for the map, chat, and agent modules
