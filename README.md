@@ -1,4 +1,4 @@
-# geo-agent-template
+# glen-template
 
 A GitHub template for deploying an AI-powered interactive map app.
 Users describe in plain language what datasets to show; the app uses an LLM agent with map tools and SQL access to visualize and analyze cloud-native geospatial data.
