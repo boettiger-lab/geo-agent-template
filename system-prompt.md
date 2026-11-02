@@ -1,7 +1,7 @@
 <!-- Each app customizes its persona, domain context, and guardrails here.
      The template ships only the guidance below; replace/extend it for your dataset.
      Keep it lean — dataset schemas and S3 paths come from the MCP tools at runtime,
-     not this file. See https://boettiger-lab.github.io/geo-agent/ -->
+     not this file. See https://schmidtdse.github.io/glen/ -->
 
 ## Ask, don't guess
 
