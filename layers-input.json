@@ -34,23 +34,19 @@
         "models": [
             {
                 "value": "~deepseek/deepseek-v4-flash-latest",
-                "label": "DeepSeek V4 Flash Latest"
+                "label": "DeepSeek V4 Flash"
             },
             {
-                "value": "google/gemini-3.5-flash-lite",
-                "label": "Gemini 3.5 Flash Lite"
+                "value": "nvidia/nemotron-3.5-super-vl",
+                "label": "Nemotron 3.5 Super"
             },
             {
-                "value": "z-ai/glm-5.2",
-                "label": "GLM-5.2"
+                "value": "z-ai/glm-5.3-flash",
+                "label": "GLM-5.3 Flash"
             },
             {
-                "value": "anthropic/claude-sonnet-5",
-                "label": "Claude Sonnet 5"
-            },
-            {
-                "value": "moonshotai/kimi-k3",
-                "label": "Kimi 3"
+                "value": "minimax/minimax-m3.1-flash",
+                "label": "MiniMax M3.1 Flash"
             }
         ]
     },
