@@ -169,6 +169,21 @@ data:
             proxy_buffering off;
         }
 
+        # Reverse proxy to the shared DuckDB MCP server. The server requires a
+        # bearer token (geo-query#453); nginx attaches it from ${MCP_AUTH_TOKEN}
+        # so the browser never holds it, and proxies the in-cluster Service
+        # rather than the public hostname (glen-ops#73).
+        location /api/mcp {
+            proxy_pass http://mcp-server-duckdb.biodiversity.svc.cluster.local:8000/mcp;
+            proxy_http_version 1.1;
+            proxy_set_header Host duckdb-mcp.nrp-nautilus.io;
+            proxy_set_header Connection "";
+            proxy_set_header Authorization "Bearer ${MCP_AUTH_TOKEN}";
+            proxy_read_timeout 600s;
+            proxy_send_timeout 600s;
+            proxy_buffering off;
+        }
+
         location / {
             try_files $uri $uri/ /index.html;
             add_header Cache-Control "no-store, no-cache, must-revalidate, proxy-revalidate, max-age=0";
